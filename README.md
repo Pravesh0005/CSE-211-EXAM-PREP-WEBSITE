@@ -451,29 +451,42 @@ Pure web technologies, runs in any browser.
 ## 📁 File Structure
 
 ```
-CSE211-COA-ExamPrep/
+📂 CSE 211 EXAM PREP WEBSITE/
 │
-├── 📄 CSE211_COA_ExamPrep.html     ← Main file (open this!)
-│
+|
 ├── 📂 source-materials/
-│   ├── ppts/
-│   │   ├── CSE211 - Unit 1.pptx
-│   │   ├── CSE211 - Unit 2.pptx
-│   │   ├── CSE211 - Unit 3.pptx
-│   │   ├── CSE211 - Unit 4.pptx
-│   │   ├── CSE211 - Unit 5.pptx
-│   │   └── CSE211 - Unit 6.pptx
-│   ├── mcqs/
-│   │   ├── MCQ COA.pdf
-│   │   ├── MCQs_Unit_IV.pdf
-│   │   └── MCQ virtual memory.docx
-│   ├── notes/
-│   │   ├── Unit 1-6.docx
-│   │   └── Zero Lecture(cse211).pdf
-│   └── papers/
-│       └── CSE211 PYQs.pdf
+|   |
+|   |
+│   ├── 📂 mcqs/
+│   │   ├── 📄 MCQ virtual memory.docx
+│   │   ├── 📄 MCQ COA.pdf
+│   │   └── 📄 MCQs_Unit_IV.pdf
+|   |
+|   |
+│   ├── 📂 notes/
+│   │   ├── 📄 E-Book (cse211).pdf
+|   |   ├── 📄 Handwritten Notes (cse211).pdf
+│   │   └── 📄 SirNotes.pdf
+|   |
+|   |
+│   ├──  📂 papers/
+│   |     └── 📄 CSE211 PYQs.pdf
+|   |
+|   |
+│   └── 📂 ppts/
+|       ├── 📄 Zero lecture pdf
+│       ├── 📄 CSE211 - Unit 1.pptx
+│       ├── 📄 CSE211 - Unit 2.pptx
+│       ├── 📄 CSE211 - Unit 3.pptx
+│       ├── 📄 CSE211 - Unit 4.pptx
+│       ├── 📄 CSE211 - Unit 5.pptx
+│       └── 📄 CSE211 - Unit 6.pptx
 │
-└── 📄 README.md                     ← You are here
+├── 📄 LICENSE
+|
+├── 📄 README.md                     ← You are here
+|
+└── 📄 CSE211_COA_ExamPrep.html      ← Main file (open this!)
 ```
 
 ---
