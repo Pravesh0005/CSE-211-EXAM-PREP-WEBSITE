@@ -213,12 +213,14 @@ xdg-open CSE211_COA_ExamPrep.html   # Linux
 ├── 📄 MCQ Files:
 │   ├── MCQ COA.pdf             ← Primary MCQ source
 │   ├── MCQs_Unit_IV.pdf        ← Unit 4 specific MCQs
+|   ├── Unit 1-6.docx           ← All unit MCQs
 │   └── MCQ virtual memory.docx ← Unit 5 MCQs
 │
 ├── 📝 Notes & Papers:
-│   ├── Unit 1-6.docx           ← Combined unit notes
-│   ├── CSE211 PYQs.pdf         ← Previous Year Questions
-│   └── Zero Lecture(cse211).pdf ← Zero lecture notes
+│   ├── Ebook                          ← Ebook of CSE211
+│   ├── CSE211 PYQs.pdf                ← Previous Year Questions
+|   ├── SirNotes.pdf                   ← Teacher Notes pdf
+│   └── Handwritten Notes (cse211).pdf ← lecture handwritten notes
 │
 └── ✅ All materials cross-referenced for accuracy
 ```
