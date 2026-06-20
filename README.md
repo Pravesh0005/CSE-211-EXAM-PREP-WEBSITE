@@ -501,7 +501,7 @@ RISC pipeline:           IF → ID → EX → MEM → WB
 
 ```bash
 # 1. Fork this repository
-git fork https://github.com/yourusername/CSE211-COA-ExamPrep
+git fork https://github.com/Pravesh0005/CSE-211-EXAM-PREP-WEBSITE
 
 # 2. Create your feature branch
 git checkout -b feature/fix-booth-explanation
