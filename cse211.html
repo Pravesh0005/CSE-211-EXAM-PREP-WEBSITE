@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSE211 — Computer Organization & Architecture | Ultimate Exam Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07080f;--bg2:#0f1018;--bg3:#171820;--glass:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);--accent:#0ea5e9;--accent2:#8b5cf6;--accent3:#f59e0b;--green:#10b981;--red:#ef4444;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:265px;min-width:265px;background:var(--bg2);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;transition:.3s}
+.sidebar.hidden{transform:translateX(-265px)}
+.main{margin-left:265px;flex:1;transition:.3s}
+.main.expanded{margin-left:0}
+.logo{padding:18px;border-bottom:1px solid var(--border);text-align:center}
+.logo-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo-sub{font-size:.62rem;color:var(--text3);margin-top:2px;font-family:'DM Mono',monospace}
+.nav-section{padding:10px 10px 4px;font-size:.62rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.1em}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 13px;margin:2px 7px;border-radius:7px;cursor:pointer;transition:.2s;font-size:.82rem;color:var(--text2);text-decoration:none;border:1px solid transparent}
+.nav-item:hover,.nav-item.active{background:var(--glass);color:var(--text);border-color:var(--border)}
+.nav-item.active{background:rgba(14,165,233,0.12);border-color:rgba(14,165,233,0.3);color:var(--accent)}
+.nav-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:.58rem;padding:2px 6px;border-radius:10px}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:11px 22px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;backdrop-filter:blur(10px)}
+.menu-btn{background:none;border:1px solid var(--border);color:var(--text);padding:5px 9px;border-radius:6px;cursor:pointer;font-size:1rem}
+.search-bar{flex:1;position:relative;max-width:380px}
+.search-bar input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 13px 7px 34px;border-radius:8px;font-size:.83rem;font-family:'Outfit',sans-serif;outline:none;transition:.2s}
+.search-bar input:focus{border-color:var(--accent)}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:.85rem}
+.topbar-right{display:flex;align-items:center;gap:9px;margin-left:auto}
+.score-pill{background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:var(--green);padding:4px 11px;border-radius:20px;font-size:.75rem;font-family:'DM Mono',monospace}
+.timer-pill{background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);color:var(--accent3);padding:4px 11px;border-radius:20px;font-size:.75rem;font-family:'DM Mono',monospace;cursor:pointer}
+.page{display:none;padding:26px}
+.page.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.hero{background:linear-gradient(135deg,rgba(14,165,233,0.14),rgba(139,92,246,0.08));border:1px solid var(--border);border-radius:16px;padding:30px;margin-bottom:26px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40%;right:-8%;width:280px;height:280px;background:radial-gradient(circle,rgba(14,165,233,0.18),transparent 70%);pointer-events:none}
+.hero-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;line-height:1.2;margin-bottom:8px}
+.hero-sub{color:var(--text2);font-size:.88rem;max-width:580px;line-height:1.6}
+.hero-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.htag{background:var(--glass);border:1px solid var(--border);padding:3px 11px;border-radius:20px;font-size:.73rem;color:var(--text2)}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:26px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:15px;text-align:center}
+.stat-num{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:.72rem;color:var(--text3);margin-top:3px}
+.section-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+table{width:100%;border-collapse:collapse;margin-bottom:18px;font-size:.81rem}
+th{background:rgba(14,165,233,0.13);color:var(--accent);padding:8px 11px;text-align:left;font-weight:600;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;font-size:.7rem;text-transform:uppercase}
+td{padding:8px 11px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--text2);vertical-align:top}
+tr:hover td{background:var(--glass)}
+.tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.67rem;font-weight:600;font-family:'DM Mono',monospace}
+.tag.hot{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);color:#f87171}
+.tag.imp{background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);color:#fbbf24}
+.tag.mcq{background:rgba(14,165,233,0.15);border:1px solid rgba(14,165,233,0.4);color:#38bdf8}
+.tag.green{background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);color:#34d399}
+.unit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:14px;margin-bottom:22px}
+.unit-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.unit-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.unit-card:nth-child(1)::before{background:linear-gradient(90deg,#0ea5e9,#38bdf8)}
+.unit-card:nth-child(2)::before{background:linear-gradient(90deg,#8b5cf6,#a78bfa)}
+.unit-card:nth-child(3)::before{background:linear-gradient(90deg,#10b981,#34d399)}
+.unit-card:nth-child(4)::before{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.unit-card:nth-child(5)::before{background:linear-gradient(90deg,#ec4899,#f472b6)}
+.unit-card:nth-child(6)::before{background:linear-gradient(90deg,#ef4444,#f87171)}
+.unit-card:hover{border-color:rgba(255,255,255,0.14);transform:translateY(-2px)}
+.unit-num{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--text3);margin-bottom:5px}
+.unit-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.93rem;margin-bottom:7px}
+.unit-topics{font-size:.76rem;color:var(--text2);line-height:1.5}
+.unit-footer{display:flex;align-items:center;gap:7px;margin-top:11px;padding-top:11px;border-top:1px solid var(--border)}
+.concept{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:13px;border-left:3px solid var(--accent)}
+.concept.green{border-left-color:var(--green)}
+.concept.amber{border-left-color:var(--accent3)}
+.concept.purple{border-left-color:var(--accent2)}
+.concept h3{font-family:'Syne',sans-serif;font-size:.92rem;font-weight:700;margin-bottom:9px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.concept p,.concept li{font-size:.81rem;color:var(--text2);line-height:1.7}
+.concept ul,.concept ol{padding-left:17px}
+.concept li{margin-bottom:4px}
+.formula-box{background:rgba(14,165,233,0.08);border:1px solid rgba(14,165,233,0.28);border-radius:8px;padding:11px;margin:9px 0;font-family:'DM Mono',monospace;font-size:.78rem;color:#7dd3fc;line-height:1.9;white-space:pre-wrap}
+.trap-box{background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.23);border-radius:8px;padding:9px 13px;margin:9px 0;font-size:.78rem;color:#fca5a5}
+.trap-box strong{color:#ef4444;display:block;margin-bottom:3px}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:11px 0}
+.compare-col{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:11px}
+.compare-col h4{font-size:.77rem;font-weight:700;margin-bottom:7px;color:var(--accent)}
+.compare-col li{font-size:.74rem;color:var(--text2);margin-bottom:3px}
+.memory-trick{background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.23);border-radius:8px;padding:9px 13px;font-size:.78rem;color:#fcd34d;font-style:italic;margin-top:7px}
+.mcq-filters{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.filter-btn{background:var(--bg2);border:1px solid var(--border);color:var(--text2);padding:5px 13px;border-radius:20px;cursor:pointer;font-size:.78rem;transition:.2s}
+.filter-btn.active,.filter-btn:hover{background:rgba(14,165,233,0.18);border-color:rgba(14,165,233,0.4);color:var(--accent)}
+.mcq-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:18px;margin-bottom:13px;transition:.2s}
+.mcq-card.correct-card{border-color:var(--green);background:rgba(16,185,129,0.05)}
+.mcq-card.wrong-card{border-color:var(--red);background:rgba(239,68,68,0.05)}
+.mcq-header{display:flex;align-items:flex-start;gap:11px;margin-bottom:13px}
+.mcq-num{background:var(--accent);color:#fff;min-width:27px;height:27px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-family:'DM Mono',monospace;font-weight:600;margin-top:2px;flex-shrink:0}
+.mcq-q{font-size:.86rem;line-height:1.6;flex:1}
+.mcq-tags{display:flex;gap:5px;margin-bottom:11px;flex-wrap:wrap}
+.options{display:grid;gap:7px;margin-bottom:13px}
+.option{display:flex;align-items:flex-start;gap:9px;padding:9px 13px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;cursor:pointer;transition:.2s;font-size:.81rem;line-height:1.5}
+.option:hover{border-color:rgba(14,165,233,0.4);background:rgba(14,165,233,0.05)}
+.option.selected{border-color:var(--accent);background:rgba(14,165,233,0.1)}
+.option.correct{border-color:var(--green)!important;background:rgba(16,185,129,0.1)!important}
+.option.wrong{border-color:var(--red)!important;background:rgba(239,68,68,0.1)!important}
+.opt-letter{min-width:21px;height:21px;border-radius:4px;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.7rem;font-weight:700;flex-shrink:0}
+.mcq-actions{display:flex;gap:7px;flex-wrap:wrap}
+.btn{padding:7px 14px;border-radius:7px;cursor:pointer;font-size:.79rem;font-family:'Outfit',sans-serif;font-weight:600;border:none;transition:.2s}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#0284c7}
+.btn-secondary{background:var(--bg3);border:1px solid var(--border);color:var(--text2)}.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+.answer-reveal{background:var(--bg3);border-radius:7px;padding:13px;margin-top:11px;font-size:.81rem;display:none;animation:fadeIn .2s ease}
+.answer-reveal.show{display:block}
+.correct-ans{color:var(--green);font-weight:600;font-family:'DM Mono',monospace;margin-bottom:7px;font-size:.79rem}
+.explanation{color:var(--text2);line-height:1.6}
+.progress-bar{background:var(--bg3);border-radius:4px;height:4px;margin-bottom:18px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:.5s}
+.cheat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:13px;margin-bottom:22px}
+.cheat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:15px}
+.cheat-card h3{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;margin-bottom:11px;color:var(--accent)}
+.cheat-item{display:flex;align-items:flex-start;gap:7px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:.76rem;line-height:1.5}
+.cheat-item:last-child{border:none}
+.cheat-key{font-family:'DM Mono',monospace;color:var(--accent3);min-width:95px;font-size:.7rem;flex-shrink:0}
+.cheat-val{color:var(--text2)}
+.flashcard-container{perspective:1000px;margin-bottom:18px}
+.flashcard{width:100%;height:200px;position:relative;transform-style:preserve-3d;transition:transform .5s;cursor:pointer}
+.flashcard.flipped{transform:rotateY(180deg)}
+.flashcard-front,.flashcard-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:14px;display:flex;align-items:center;justify-content:center;padding:22px;text-align:center}
+.flashcard-front{background:linear-gradient(135deg,rgba(14,165,233,0.18),rgba(139,92,246,0.1));border:1px solid rgba(14,165,233,0.3);font-family:'Syne',sans-serif;font-size:.97rem;font-weight:700}
+.flashcard-back{background:linear-gradient(135deg,rgba(16,185,129,0.14),rgba(14,165,233,0.08));border:1px solid rgba(16,185,129,0.3);transform:rotateY(180deg);font-size:.81rem;color:var(--text2);line-height:1.6}
+.flashcard-nav{display:flex;gap:9px;align-items:center;margin-top:11px}
+.fc-counter{font-family:'DM Mono',monospace;font-size:.78rem;color:var(--text3);margin:0 auto}
+.mock-header{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between}
+.mock-timer{font-family:'DM Mono',monospace;font-size:2rem;font-weight:700;color:var(--accent3)}
+.question-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-bottom:18px}
+.q-bubble{width:29px;height:29px;border-radius:5px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-family:'DM Mono',monospace;cursor:pointer;background:var(--bg3)}
+.q-bubble.answered{background:rgba(14,165,233,0.28);border-color:var(--accent)}
+.q-bubble.correct{background:rgba(16,185,129,0.28);border-color:var(--green)}
+.q-bubble.wrong{background:rgba(239,68,68,0.28);border-color:var(--red)}
+.top100-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(315px,1fr));gap:9px;margin-bottom:18px}
+.top100-item{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:10px 13px;display:flex;gap:9px;align-items:flex-start;font-size:.79rem;line-height:1.5}
+.top100-num{font-family:'DM Mono',monospace;color:var(--accent);font-size:.7rem;font-weight:700;min-width:25px;margin-top:2px}
+.formula-row{display:grid;grid-template-columns:145px 1fr;gap:7px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:.79rem}
+.formula-name{font-family:'DM Mono',monospace;color:var(--accent3)}
+.formula-expr{font-family:'DM Mono',monospace;color:#7dd3fc;background:var(--bg3);padding:3px 8px;border-radius:4px;word-break:break-all}
+.search-result{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:13px;margin-bottom:9px;cursor:pointer}
+.search-result:hover{border-color:var(--accent)}
+.sr-title{font-weight:600;margin-bottom:3px;font-size:.86rem}
+.sr-context{font-size:.76rem;color:var(--text2)}
+.sr-type{font-size:.66rem;font-family:'DM Mono',monospace;color:var(--accent3);margin-bottom:3px}
+.prob-bar{background:var(--bg3);border-radius:4px;height:5px;margin-top:5px;overflow:hidden}
+.prob-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+@media(max-width:768px){.sidebar{transform:translateX(-265px)}.sidebar.mobile-open{transform:translateX(0)}.main{margin-left:0}.stats-row{grid-template-columns:repeat(2,1fr)}.compare-grid{grid-template-columns:1fr}.question-grid{grid-template-columns:repeat(6,1fr)}}
+@media print{.sidebar,.topbar{display:none}.main{margin:0}.page.active{padding:8px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="logo-title">⚙️ CSE211 COA EXAM PREP</div>
+    <div class="logo-sub">COMPUTER ORGANIZATION & ARCHITECTURE</div>
+  </div>
+  <div class="nav-section">Dashboard</div>
+  <a class="nav-item active" onclick="showPage('dashboard')" href="#">🏠 Dashboard</a>
+  <a class="nav-item" onclick="showPage('analysis')" href="#">📊 Exam Analysis <span class="nav-badge">HOT</span></a>
+  <div class="nav-section">Unit Notes</div>
+  <a class="nav-item" onclick="showPage('unit1')" href="#">1️⃣ Unit 1 – Basic Computer</a>
+  <a class="nav-item" onclick="showPage('unit2')" href="#">2️⃣ Unit 2 – CPU Organization</a>
+  <a class="nav-item" onclick="showPage('unit3')" href="#">3️⃣ Unit 3 – I/O Organization</a>
+  <a class="nav-item" onclick="showPage('unit4')" href="#">4️⃣ Unit 4 – RTL & Arithmetic <span class="nav-badge">★</span></a>
+  <a class="nav-item" onclick="showPage('unit5')" href="#">5️⃣ Unit 5 – Memory Systems</a>
+  <a class="nav-item" onclick="showPage('unit6')" href="#">6️⃣ Unit 6 – Parallel & GPU</a>
+  <div class="nav-section">Revision</div>
+  <a class="nav-item" onclick="showPage('cheatsheet')" href="#">📋 Cheat Sheets</a>
+  <a class="nav-item" onclick="showPage('formulas')" href="#">🔢 Formula Sheet</a>
+  <a class="nav-item" onclick="showPage('top100')" href="#">🏆 Top 100 Points</a>
+  <a class="nav-item" onclick="showPage('compare')" href="#">⚖️ Comparison Tables</a>
+  <a class="nav-item" onclick="showPage('flashcards')" href="#">🃏 Flashcards (40)</a>
+  <div class="nav-section">Practice</div>
+  <a class="nav-item" onclick="showPage('mcq')" href="#">❓ MCQ Bank <span class="nav-badge">100+</span></a>
+  <a class="nav-item" onclick="showPage('mocktest')" href="#">📝 Mock Test (30 Qs)</a>
+</aside>
+
+<div class="main" id="mainContent">
+  <div class="topbar">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    <div class="search-bar"><span class="search-icon">🔍</span><input type="text" id="searchInput" placeholder="Search registers, instructions, memory, DMA..." oninput="doSearch(this.value)"></div>
+    <div class="topbar-right">
+      <div class="score-pill" id="scorePill">Score: 0/0</div>
+      <div class="timer-pill" id="timerPill" onclick="toggleTimer()">⏱ 00:00</div>
+      <button class="btn btn-secondary" onclick="window.print()" style="padding:4px 9px;font-size:.75rem">🖨</button>
+    </div>
+  </div>
+
+  <div class="page" id="page-search" style="display:none">
+    <div class="section-title">🔍 Search Results</div>
+    <div id="searchResults"></div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="hero">
+      <div class="hero-title">⚙️ CSE211 — Computer Organization<br>& Architecture Exam Prep</div>
+      <div class="hero-sub">Complete package built from your 9 PPTs, PYQs, MCQ banks, Sir Notes, Handwritten notes & Unit 1-6 DOCX. Morris Mano based. Optimized for exam excellence.</div>
+      <div class="hero-tags">
+        <span class="htag">📚 6 Units</span><span class="htag">❓ 100+ MCQs</span><span class="htag">🃏 40 Flashcards</span><span class="htag">📝 Mock Test</span><span class="htag">📋 Cheat Sheets</span><span class="htag">🏆 Top 100 Points</span><span class="htag">📖 Morris Mano</span>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Units Covered</div></div>
+      <div class="stat-card"><div class="stat-num">100+</div><div class="stat-label">MCQs Generated</div></div>
+      <div class="stat-card"><div class="stat-num">40</div><div class="stat-label">Flashcards</div></div>
+      <div class="stat-card"><div class="stat-num">9</div><div class="stat-label">PPTs Analyzed</div></div>
+    </div>
+    <div class="section-title">🎯 Unit Quick Access</div>
+    <div class="unit-grid">
+      <div class="unit-card" onclick="showPage('unit1')"><div class="unit-num">UNIT 01</div><div class="unit-name">Basic Computer Organization</div><div class="unit-topics">Instruction codes, Registers (PC,AR,DR,AC,IR,TR), Common Bus, Instruction Cycle, Memory/IO Reference</div><div class="unit-footer"><span class="tag hot">MOST TESTED</span><span style="font-size:.7rem;color:var(--accent);margin-left:auto">~15 MCQs</span></div></div>
+      <div class="unit-card" onclick="showPage('unit2')"><div class="unit-num">UNIT 02</div><div class="unit-name">Central Processing Unit</div><div class="unit-topics">General Register Org, Stack, Instruction Formats, Addressing Modes, RISC vs CISC, Interrupts, PSW</div><div class="unit-footer"><span class="tag hot">HIGH PRIORITY</span><span style="font-size:.7rem;color:var(--accent);margin-left:auto">~18 MCQs</span></div></div>
+      <div class="unit-card" onclick="showPage('unit3')"><div class="unit-num">UNIT 03</div><div class="unit-name">I/O Organization</div><div class="unit-topics">I/O Interface, Programmed I/O, Interrupt I/O, DMA, Priority Interrupts, Daisy Chain, IOP/Channel</div><div class="unit-footer"><span class="tag imp">HIGH</span><span style="font-size:.7rem;color:var(--accent);margin-left:auto">~15 MCQs</span></div></div>
+      <div class="unit-card" onclick="showPage('unit4')"><div class="unit-num">UNIT 04</div><div class="unit-name">RTL & Computer Arithmetic</div><div class="unit-topics">RTL, Bus Transfer, Micro-ops (Arith/Logic/Shift), Booth's Algorithm, Shift Registers, SISO/SIPO/PIPO</div><div class="unit-footer"><span class="tag imp">NUMERICAL</span><span style="font-size:.7rem;color:var(--accent);margin-left:auto">~18 MCQs</span></div></div>
+      <div class="unit-card" onclick="showPage('unit5')"><div class="unit-num">UNIT 05</div><div class="unit-name">Memory Organization</div><div class="unit-topics">Memory Hierarchy, Cache (Direct/Associative/Set), Virtual Memory, Page Replacement, Hit Ratio</div><div class="unit-footer"><span class="tag hot">NUMERICAL</span><span style="font-size:.7rem;color:var(--accent);margin-left:auto">~18 MCQs</span></div></div>
+      <div class="unit-card" onclick="showPage('unit6')"><div class="unit-num">UNIT 06</div><div class="unit-name">Parallel & Modern Arch.</div><div class="unit-topics">Pipelining, Flynn's Classification (SISD/SIMD/MIMD), Multiprocessors, GPU, Interconnection</div><div class="unit-footer"><span class="tag mcq">MODERN</span><span style="font-size:.7rem;color:var(--accent);margin-left:auto">~10 MCQs</span></div></div>
+    </div>
+    <div class="section-title">🔥 Hottest Topics (From MCQ Bank + PYQs Analysis)</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px;margin-bottom:22px">
+      <div class="concept amber"><h3>🥇 Instruction Cycle</h3><p>Fetch (T0–T2) → Decode → Execute. Micro-operations at each timing signal. In every paper.</p></div>
+      <div class="concept"><h3>🥈 Addressing Modes</h3><p>Direct, Indirect, Register, Immediate, Relative, Indexed. EA calculations guaranteed numerical MCQs.</p></div>
+      <div class="concept green"><h3>🥉 Cache Memory</h3><p>Hit ratio formula, Direct vs Associative vs Set-Associative mapping. Numerical Te calculation.</p></div>
+      <div class="concept purple"><h3>4️⃣ DMA vs Programmed I/O</h3><p>DMA = direct memory transfer, no CPU. Programmed = polling (CPU busy). Interrupt = CPU notified.</p></div>
+      <div class="concept amber"><h3>5️⃣ RISC vs CISC</h3><p>RISC = fixed length, load-store, hardwired, few modes. CISC = complex, microprogrammed, many modes.</p></div>
+      <div class="concept"><h3>6️⃣ Booth's Algorithm</h3><p>Signed 2's complement multiplication. Rules for 00/11 (shift), 10 (subtract), 01 (add) then shift.</p></div>
+    </div>
+  </div>
+
+  <!-- ANALYSIS PAGE -->
+  <div class="page" id="page-analysis">
+    <div class="section-title">📊 Exam Analysis — CSE211</div>
+    <div class="concept amber"><h3>📋 Paper Pattern (CSE211)</h3><p>Based on your PYQs and MCQ bank: Multiple choice + short questions. Heavy focus on Morris Mano chapters. Numerical MCQs on cache hit ratio, EA calculation, stack operations.</p></div>
+    <div class="section-title">🎯 Unit Weightage</div>
+    <table><tr><th>Unit</th><th>Topics</th><th>Est. Marks%</th><th>Priority</th><th>Probability</th></tr>
+    <tr><td>Unit 1</td><td>Basic Computer, Registers, Instruction Cycle, Fetch-Decode-Execute</td><td>15–20%</td><td><span class="tag hot">VERY HIGH</span></td><td><div class="prob-bar"><div class="prob-fill" style="width:88%"></div></div></td></tr>
+    <tr><td>Unit 2</td><td>CPU, Addressing Modes, Stack, RISC/CISC, Instruction Formats, Interrupts</td><td>20–25%</td><td><span class="tag hot">HIGHEST</span></td><td><div class="prob-bar"><div class="prob-fill" style="width:95%"></div></div></td></tr>
+    <tr><td>Unit 3</td><td>I/O, DMA, Priority Interrupt, Daisy Chain, Programmed/Interrupt I/O</td><td>15–18%</td><td><span class="tag imp">HIGH</span></td><td><div class="prob-bar"><div class="prob-fill" style="width:80%"></div></div></td></tr>
+    <tr><td>Unit 4</td><td>RTL, Micro-ops, Booth's Algorithm, Shift Registers, Logic/Shift micro-ops</td><td>15–18%</td><td><span class="tag imp">HIGH</span></td><td><div class="prob-bar"><div class="prob-fill" style="width:82%"></div></div></td></tr>
+    <tr><td>Unit 5</td><td>Cache, Virtual Memory, Page Replacement, Memory Hierarchy, Hit Ratio</td><td>20–25%</td><td><span class="tag hot">VERY HIGH</span></td><td><div class="prob-bar"><div class="prob-fill" style="width:92%"></div></div></td></tr>
+    <tr><td>Unit 6</td><td>Pipelining, Flynn's Classification, Multiprocessors, GPU</td><td>8–12%</td><td><span class="tag mcq">MEDIUM</span></td><td><div class="prob-bar"><div class="prob-fill" style="width:60%"></div></div></td></tr></table>
+    <div class="section-title">⚠️ Critical Traps & Confusions</div>
+    <div class="trap-box"><strong>TRAP 1: IR vs PC vs AR vs DR</strong>PC = address of NEXT instruction. AR = current address being accessed. IR = holds current instruction. DR = data read from/written to memory. AC = accumulator (computation). TR = temporary.</div>
+    <div class="trap-box"><strong>TRAP 2: Fetch Cycle Timing</strong>T0: AR←PC. T1: IR←M[AR], PC←PC+1. T2: Decode. These 3 timing signals are for FETCH. Don't mix with execute cycle timings.</div>
+    <div class="trap-box"><strong>TRAP 3: Register Reference vs Memory Reference</strong>Register Reference: opcode=111, I=0 (D7=1, I'=1). I/O Instructions: opcode=111, I=1 (D7=1, I=1). Memory Reference: opcode≠111.</div>
+    <div class="trap-box"><strong>TRAP 4: Direct vs Indirect Addressing EA</strong>Direct: EA = address field of instruction. Indirect: EA = M[address field]. Register Indirect: EA = [R]. PC Relative: EA = PC + offset.</div>
+    <div class="trap-box"><strong>TRAP 5: DMA vs Interrupt I/O vs Programmed I/O</strong>Programmed I/O: CPU polls (busy-wait). Interrupt I/O: Device interrupts CPU when ready. DMA: Data transferred directly memory↔device WITHOUT CPU. CPU most efficient use = DMA.</div>
+    <div class="trap-box"><strong>TRAP 6: Cache Hit Ratio Formula</strong>Te = h×Tc + (1-h)×(Tc+Tm) = Tc + (1-h)×Tm. NOT Te = h×Tc + (1-h)×Tm. Always add Tc for cache access regardless of hit/miss.</div>
+    <div class="trap-box"><strong>TRAP 7: RISC vs CISC Key Points</strong>RISC: hardwired control (NOT microprogrammed), fixed-length instructions, load-store only. CISC: microprogrammed control, variable-length, memory-to-memory operations.</div>
+    <div class="trap-box"><strong>TRAP 8: Booth's Algorithm Rules</strong>Current bit=0, Prev bit=1 → ADD multiplicand. Current=1, Prev=0 → SUBTRACT. Current=Previous (00 or 11) → just arithmetic RIGHT SHIFT. Start with prev=0.</div>
+    <div class="trap-box"><strong>TRAP 9: Stack PUSH vs POP</strong>Stack grows downward. PUSH: SP←SP-1, M[SP]←DR. POP: DR←M[SP], SP←SP+1. SP always points to TOP of stack (last pushed item).</div>
+    <div class="trap-box"><strong>TRAP 10: Daisy Chain Priority</strong>Device with PI=1 and no pending interrupt → passes PO=1 to next device. Device with PI=1 AND pending interrupt → keeps PO=0 (blocks chain). Highest priority = closest to CPU.</div>
+  </div>
+
+  <!-- UNIT 1 -->
+  <div class="page" id="page-unit1">
+    <div class="section-title">1️⃣ Unit 1 — Basic Computer Organization (Morris Mano)</div>
+    <div class="concept amber"><h3>🖥 Computer Org vs Architecture <span class="tag hot">DEFINITION MCQ</span></h3>
+      <div class="compare-grid">
+        <div class="compare-col"><h4>Computer Organization</h4><ul><li>HOW the computer does it</li><li>Internal hardware structure</li><li>Registers, buses, data flow</li><li>Visible to hardware designer</li><li>Physical implementation</li></ul></div>
+        <div class="compare-col"><h4>Computer Architecture</h4><ul><li>WHAT the computer can do</li><li>Instruction set, data types</li><li>Addressing modes, bit width</li><li>Visible to the programmer</li><li>ISA definition</li></ul></div>
+      </div>
+    </div>
+    <div class="concept"><h3>📋 Basic Computer Registers <span class="tag hot">EXAM CORE</span></h3>
+      <table><tr><th>Register</th><th>Bits</th><th>Function</th></tr>
+      <tr><td>PC (Program Counter)</td><td>12</td><td>Address of NEXT instruction to fetch</td></tr>
+      <tr><td>AR (Address Register)</td><td>12</td><td>Address currently being accessed in memory</td></tr>
+      <tr><td>IR (Instruction Register)</td><td>16</td><td>Holds the current instruction being decoded</td></tr>
+      <tr><td>DR (Data Register)</td><td>16</td><td>Holds data read from or written to memory</td></tr>
+      <tr><td>AC (Accumulator)</td><td>16</td><td>General purpose register for computation</td></tr>
+      <tr><td>TR (Temp Register)</td><td>16</td><td>Temporary storage for intermediate results</td></tr>
+      <tr><td>INPR (Input Register)</td><td>8</td><td>Holds 8-bit character from input device</td></tr>
+      <tr><td>OUTR (Output Register)</td><td>8</td><td>Holds 8-bit character for output device</td></tr>
+      <tr><td>SC (Sequence Counter)</td><td>4</td><td>Generates timing signals T0–T15</td></tr></table>
+      <div class="trap-box"><strong>TRAP:</strong> PC holds address of NEXT instruction (not current). IR holds the CURRENT instruction being executed. AR is the memory address buffer.</div>
+    </div>
+    <div class="concept cyan"><h3>📨 Instruction Format (16-bit) <span class="tag hot">MCQ</span></h3>
+      <div class="formula-box">Bit 15 (I): Addressing mode (0=Direct, 1=Indirect)
+Bits 14-12 (Opcode): 3 bits → 8 possible opcodes (000 to 111)
+Bits 11-0 (Address): 12 bits → 4096 (2¹²) memory locations
+
+Memory Reference Instructions (opcode 000-110, I=0 or 1): AND, ADD, LDA, STA, BUN, BSA, ISZ
+Register Reference Instructions (opcode=111, I=0): CLA, CLE, CMA, CME, CIR, CIL, INC, SPA, SNA, SZA, SZE, HLT
+I/O Instructions (opcode=111, I=1): INP, OUT, SKI, SKO, ION, IOF</div>
+    </div>
+    <div class="concept green"><h3>🔄 Instruction Cycle <span class="tag hot">MOST TESTED</span></h3>
+      <p><b>Fetch Cycle (every instruction):</b></p>
+      <div class="formula-box">T0: AR ← PC           (Load PC into Address Register)
+T1: IR ← M[AR], PC ← PC+1  (Fetch instruction, increment PC)
+T2: Decode IR(12-14), AR ← IR(0-11), I ← IR(15)  (Decode opcode + address)</div>
+      <p><b>If Indirect Addressing (I=1, Memory Reference, T3):</b></p>
+      <div class="formula-box">D'7IT3: AR ← M[AR]   (Get effective address from memory)</div>
+      <p><b>Interrupt Cycle (if IEN=1 and FGI/FGO=1):</b></p>
+      <div class="formula-box">AR ← 0, TR ← PC      (Save PC to temp)
+M[AR] ← TR, PC ← 0  (Store return address at memory[0], jump to ISR)
+PC ← PC+1, IEN ← 0  (Disable further interrupts, R ← 0)</div>
+      <div class="trap-box"><strong>TRAP:</strong> Fetch = T0,T1,T2 (3 signals). Total for memory-reference indirect = T0–T5 (6 signals). T0: AR←PC always first.</div>
+    </div>
+    <div class="concept amber"><h3>🚌 Common Bus System <span class="tag imp">MCQ</span></h3>
+      <p>7 registers + memory connected via 16-bit bus. Multiplexers select which register drives the bus using 3 control lines S2, S1, S0.</p>
+      <div class="formula-box">S2 S1 S0 → Register (Output to Bus)
+0  0  0  → None (no selection)
+0  0  1  → AR (Address Register)
+0  1  0  → PC (Program Counter)
+0  1  1  → DR (Data Register)
+1  0  0  → AC (Accumulator)
+1  0  1  → IR (Instruction Register)
+1  1  0  → TR (Temp Register)
+1  1  1  → Memory (M[AR])</div>
+    </div>
+    <div class="concept"><h3>📋 Memory Reference Instructions <span class="tag hot">KEY</span></h3>
+      <table><tr><th>Instr</th><th>Operation</th><th>Effect</th></tr>
+      <tr><td>AND</td><td>AC ← AC ∧ M[EA]</td><td>Bitwise AND memory with AC</td></tr>
+      <tr><td>ADD</td><td>AC ← AC + M[EA], E←carry</td><td>Add memory to AC, set carry E</td></tr>
+      <tr><td>LDA</td><td>AC ← M[EA]</td><td>Load AC from memory</td></tr>
+      <tr><td>STA</td><td>M[EA] ← AC</td><td>Store AC into memory</td></tr>
+      <tr><td>BUN</td><td>PC ← EA</td><td>Branch unconditionally to EA</td></tr>
+      <tr><td>BSA</td><td>M[EA]←PC, PC←EA+1</td><td>Branch and save return address</td></tr>
+      <tr><td>ISZ</td><td>M[EA]←M[EA]+1; if 0, PC←PC+1</td><td>Increment and skip if zero</td></tr></table>
+    </div>
+    <div class="concept green"><h3>📋 Register Reference Instructions <span class="tag imp">LIST</span></h3>
+      <table><tr><th>Instr</th><th>Bit</th><th>Operation</th></tr>
+      <tr><td>CLA</td><td>B11</td><td>AC ← 0 (clear accumulator)</td></tr>
+      <tr><td>CLE</td><td>B10</td><td>E ← 0 (clear carry)</td></tr>
+      <tr><td>CMA</td><td>B9</td><td>AC ← AC' (complement AC)</td></tr>
+      <tr><td>CME</td><td>B8</td><td>E ← E' (complement carry)</td></tr>
+      <tr><td>CIR</td><td>B7</td><td>Circular right shift AC through E</td></tr>
+      <tr><td>CIL</td><td>B6</td><td>Circular left shift AC through E</td></tr>
+      <tr><td>INC</td><td>B5</td><td>AC ← AC + 1 (increment)</td></tr>
+      <tr><td>SPA</td><td>B4</td><td>Skip if AC positive (AC(15)=0)</td></tr>
+      <tr><td>SNA</td><td>B3</td><td>Skip if AC negative (AC(15)=1)</td></tr>
+      <tr><td>SZA</td><td>B2</td><td>Skip if AC = 0</td></tr>
+      <tr><td>SZE</td><td>B1</td><td>Skip if E = 0</td></tr>
+      <tr><td>HLT</td><td>B0</td><td>S ← 0 (halt computer)</td></tr></table>
+    </div>
+    <div class="concept amber"><h3>🔌 I/O and Interrupt Flags <span class="tag imp">MCQ</span></h3>
+      <ul><li><b>FGI (Input Flag):</b> =1 means new input data available. =0 means computer accepted it.</li><li><b>FGO (Output Flag):</b> =1 means data transferred from AC to OUTR. =0 means don't load new data.</li><li><b>IEN (Interrupt Enable):</b> =1 enables interrupts, =0 disables interrupts.</li><li><b>Interrupt initiated when:</b> IEN=1 AND (FGI=1 OR FGO=1)</li></ul>
+      <div class="trap-box"><strong>TRAP:</strong> Interrupt flip-flop R is SET when interrupts occur and CLEARED during interrupt cycle. IEN is cleared during interrupt cycle to prevent nested interrupts.</div>
+    </div>
+  </div>
+
+  <!-- UNIT 2 -->
+  <div class="page" id="page-unit2">
+    <div class="section-title">2️⃣ Unit 2 — Central Processing Unit</div>
+    <div class="concept amber"><h3>🗂 General Register Organization <span class="tag hot">CONTROL WORD</span></h3>
+      <p>Modern CPUs have multiple general-purpose registers (R1–R7). Control unit directs info flow through ALU using:</p>
+      <div class="formula-box">Control Word = SELA (3 bits) | SELB (3 bits) | SELD (3 bits) | OPR (5 bits)
+SELA → selects source for Bus A (input to ALU)
+SELB → selects source for Bus B (input to ALU)
+SELD → selects destination register (from ALU output)
+OPR  → ALU operation (ADD, SUB, AND, OR, XOR, TSFA, SHLA, etc.)
+
+Example: R1 ← R2 + R3
+Control Word: SELA=R2, SELB=R3, SELD=R1, OPR=ADD
+= 010 | 011 | 001 | 00010</div>
+    </div>
+    <div class="concept"><h3>📚 Stack Organization <span class="tag hot">PUSH/POP MCQ</span></h3>
+      <p>Stack = LIFO structure. SP (Stack Pointer) points to TOP of stack. Stack grows DOWNWARD (SP decrements on PUSH).</p>
+      <div class="formula-box">PUSH (store DR onto stack):
+  SP ← SP - 1          (decrement first)
+  M[SP] ← DR           (then store)
+  if (SP=0) FULL ← 1   (check overflow)
+
+POP (retrieve from stack into DR):
+  DR ← M[SP]           (read first)
+  SP ← SP + 1          (then increment)
+  if (SP=0) EMPTY ← 1  (check underflow)
+
+Stack Overflow: PUSH when FULL=1
+Stack Underflow: POP when EMPTY=1</div>
+      <p><b>Reverse Polish Notation (RPN/Postfix):</b> A B + C × evaluates left-to-right using stack. Operands pushed, operators pop and compute.</p>
+      <p><b>Example:</b> (3×4) + (5×6) in RPN = 3 4 × 5 6 × +</p>
+    </div>
+    <div class="concept cyan"><h3>📐 Instruction Formats <span class="tag hot">3/2/1/0 ADDRESS</span></h3>
+      <table><tr><th>Format</th><th>Example</th><th>Expression X=(A+B)×(C+D)</th><th>Memory Traffic</th></tr>
+      <tr><td>3-Address</td><td>ADD R1,A,B</td><td>3 instructions</td><td>High (many addresses)</td></tr>
+      <tr><td>2-Address</td><td>ADD R1,R2</td><td>5 instructions</td><td>Medium</td></tr>
+      <tr><td>1-Address</td><td>LOAD A (uses AC)</td><td>7 instructions</td><td>Low (implied AC)</td></tr>
+      <tr><td>0-Address</td><td>ADD (uses stack)</td><td>Many PUSH/POP</td><td>Lowest (uses stack)</td></tr></table>
+      <div class="trap-box"><strong>KEY:</strong> 3-address → shortest programs, longest instructions. 0-address → longest programs (most instructions), used in stack machines. Register-to-register minimizes memory traffic.</div>
+    </div>
+    <div class="concept green"><h3>🎯 Addressing Modes <span class="tag hot">EA CALCULATION</span></h3>
+      <table><tr><th>Mode</th><th>EA Calculation</th><th>Example</th></tr>
+      <tr><td>Implied</td><td>Operand in AC or Stack</td><td>CLA, INP</td></tr>
+      <tr><td>Immediate</td><td>Operand IS the address field</td><td>MVI B, 44h</td></tr>
+      <tr><td>Register</td><td>EA = register content</td><td>MOV A, B</td></tr>
+      <tr><td>Register Indirect</td><td>EA = [R] (memory at register)</td><td>LDAX B</td></tr>
+      <tr><td>Direct</td><td>EA = IR(addr)</td><td>LDA 500</td></tr>
+      <tr><td>Indirect</td><td>EA = M[IR(addr)]</td><td>LDA [500]</td></tr>
+      <tr><td>PC Relative</td><td>EA = PC + offset</td><td>BZ +20</td></tr>
+      <tr><td>Indexed</td><td>EA = IX + IR(addr)</td><td>LDA 100,X</td></tr>
+      <tr><td>Base Register</td><td>EA = BAR + IR(addr)</td><td>Base-relative</td></tr></table>
+      <div class="formula-box">Numerical Examples:
+PC Relative: PC=400, offset=20 → EA = 400+20 = 420
+Indirect: addr=300, M[300]=900 → EA = 900
+Indexed: IX=1000, offset=50 → EA = 1000+50 = 1050</div>
+    </div>
+    <div class="concept amber"><h3>⚡ RISC vs CISC <span class="tag hot">COMPARE MCQ</span></h3>
+      <table><tr><th>Feature</th><th>RISC</th><th>CISC</th></tr>
+      <tr><td>Instruction Set</td><td>Few, simple instructions</td><td>Many, complex instructions</td></tr>
+      <tr><td>Instruction Length</td><td>Fixed length (easy decode)</td><td>Variable length</td></tr>
+      <tr><td>Addressing Modes</td><td>Few (mainly load-store)</td><td>Many, complex modes</td></tr>
+      <tr><td>Memory Access</td><td>Only LOAD/STORE touch memory</td><td>Instructions can access memory directly</td></tr>
+      <tr><td>Control Unit</td><td>Hardwired (fast)</td><td>Microprogrammed (slower)</td></tr>
+      <tr><td>Execution</td><td>1 cycle per instruction</td><td>Multiple cycles per instruction</td></tr>
+      <tr><td>Registers</td><td>Many general-purpose registers</td><td>Fewer registers</td></tr>
+      <tr><td>Pipelining</td><td>Excellent (fixed format)</td><td>Difficult (variable format)</td></tr>
+      <tr><td>Examples</td><td>ARM, MIPS, PowerPC</td><td>Intel x86, VAX</td></tr></table>
+    </div>
+    <div class="concept"><h3>🚨 Interrupts & PSW <span class="tag hot">TYPES MCQ</span></h3>
+      <p><b>Types of Interrupts:</b></p>
+      <ul><li><b>External Interrupts:</b> I/O device ready, timing device, power failure, operator</li><li><b>Internal Interrupts (Traps):</b> Register/stack overflow, divide by zero, opcode violation, protection violation</li><li><b>Software Interrupts:</b> Supervisor call instruction (user→supervisor mode)</li></ul>
+      <p><b>PSW (Processor Status Word) Flags:</b></p>
+      <div class="formula-box">C (Carry)    = Carry out of MSB from ALU
+S (Sign)     = MSB of ALU output (0=positive, 1=negative)
+Z (Zero)     = 1 if ALU output is all zeros
+V (Overflow) = 1 if signed overflow occurred
+              = XOR of last two carry bits</div>
+      <div class="trap-box"><strong>TRAP:</strong> Overflow flag V is set when result exceeds signed range (e.g., adding two positives gives negative). Sign flag S is simply the MSB of result.</div>
+    </div>
+    <div class="concept green"><h3>📞 Subroutine vs Interrupt</h3>
+      <table><tr><th>Feature</th><th>Subroutine Call</th><th>Interrupt</th></tr>
+      <tr><td>Initiation</td><td>By instruction in program</td><td>By hardware signal (usually)</td></tr>
+      <tr><td>Address</td><td>From address field of instruction</td><td>From hardware (interrupt vector)</td></tr>
+      <tr><td>State saved</td><td>PC only (usually)</td><td>Entire CPU state (PC + all registers)</td></tr></table>
+    </div>
+  </div>
+
+  <!-- UNIT 3 -->
+  <div class="page" id="page-unit3">
+    <div class="section-title">3️⃣ Unit 3 — Input/Output Organization</div>
+    <div class="concept amber"><h3>🔌 I/O Interface <span class="tag hot">COMMANDS</span></h3>
+      <p>I/O Interface resolves differences between CPU (fast, electronic) and peripherals (slow, electromechanical). 4 types of commands:</p>
+      <ul><li><b>Control Command:</b> Activates peripheral, tells it what to do</li><li><b>Status Command:</b> Tests status conditions of interface/peripheral</li><li><b>Data Output Command:</b> Interface transfers data FROM bus INTO its register</li><li><b>Data Input Command:</b> Interface receives data FROM peripheral, places in buffer</li></ul>
+    </div>
+    <div class="concept"><h3>📟 Isolated vs Memory-Mapped I/O <span class="tag hot">COMPARE MCQ</span></h3>
+      <div class="compare-grid">
+        <div class="compare-col"><h4>Isolated I/O (I/O Mapped)</h4><ul><li>Separate address space for I/O</li><li>Distinct IN/OUT instructions</li><li>Separate control lines (IOR/IOW)</li><li>Fewer address lines needed</li><li>Example: Intel x86</li></ul></div>
+        <div class="compare-col"><h4>Memory-Mapped I/O</h4><ul><li>I/O and memory SHARE address space</li><li>Same read/write instructions</li><li>No separate I/O instructions</li><li>Flexible, powerful I/O operations</li><li>Reduces available memory</li></ul></div>
+      </div>
+      <div class="trap-box"><strong>MCQ TRAP:</strong> In memory-mapped I/O, I/O devices and memory share the SAME address space (Answer d in Unit IV MCQ bank Q1). Isolated I/O has separate address spaces.</div>
+    </div>
+    <div class="concept cyan"><h3>📡 Modes of Data Transfer <span class="tag hot">3 MODES</span></h3>
+      <table><tr><th>Mode</th><th>CPU Role</th><th>Efficiency</th><th>Use Case</th></tr>
+      <tr><td>Programmed I/O</td><td>Polls device continuously (busy-wait)</td><td>Very Low (CPU wasted)</td><td>Simple, slow devices</td></tr>
+      <tr><td>Interrupt-driven I/O</td><td>CPU continues work; device interrupts when ready</td><td>Medium (context switch overhead)</td><td>Most I/O devices</td></tr>
+      <tr><td>DMA</td><td>Only initializes; data transferred directly memory↔device</td><td>High (CPU free)</td><td>High-speed (Disk, video)</td></tr></table>
+    </div>
+    <div class="concept green"><h3>💾 DMA — Direct Memory Access <span class="tag hot">REGISTERS</span></h3>
+      <p>DMA Controller takes over buses to manage DIRECT transfer between memory and I/O device, freeing CPU.</p>
+      <div class="formula-box">DMA Controller Registers:
+1. Address Register   → starting memory address for transfer
+2. Word Count Register → number of words to transfer
+3. Control Register   → mode: read/write direction
+
+CPU initializes DMA then does other work.
+DMA requests bus → memory controller grants → transfer occurs.
+
+Two DMA Transfer Modes:
+1. Burst Transfer: Entire block at once (CPU bus denied during transfer)
+2. Cycle Stealing: One word at a time (CPU delayed one memory cycle each time)</div>
+      <div class="trap-box"><strong>KEY MCQ:</strong> DMA = data transferred WITHOUT CPU intervention. After initialization, CPU is free. Cycle stealing = DMA steals ONE memory cycle at a time from CPU. Bus Grant (BG)=1 means DMA has bus control.</div>
+    </div>
+    <div class="concept amber"><h3>⚡ Priority Interrupts <span class="tag hot">DAISY CHAIN</span></h3>
+      <p><b>Software Priority (Polling):</b> CPU polls each device in priority order. Simple but SLOW. Common branch address for all interrupts.</p>
+      <p><b>Hardware Priority (Daisy Chain):</b></p>
+      <div class="formula-box">Daisy Chain: Devices connected serially. Highest priority = closest to CPU.
+PI (Priority In) = 1 from CPU → passes down chain
+PO (Priority Out) = 0 if device HAS pending request (blocks chain)
+PO (Priority Out) = 1 if device has NO pending request (passes through)
+
+Device with PI=1 and NO pending → PO=1 (passes to next)
+Device with PI=1 and HAS pending → PO=0, PI=0 (stops chain, generates VAD)
+
+TRAP: PI=1,PO=1 means device is passing priority through (no interrupt request)</div>
+      <div class="trap-box"><strong>TRAP (from MCQ):</strong> In Daisy Chaining, if device has NO pending interrupt: PI=1, PO=1. It receives priority and passes it on. (Answer d: PI=1, PO=1)</div>
+    </div>
+    <div class="concept"><h3>📡 Asynchronous Data Transfer <span class="tag imp">STROBE/HANDSHAKE</span></h3>
+      <p><b>Strobe method:</b> Single control signal indicates when data is valid. Simple but no acknowledgment.</p>
+      <p><b>Handshaking:</b> Two-way exchange. Source sends "data ready", destination sends "data accepted". More reliable.</p>
+      <p><b>UART:</b> Universal Asynchronous Receiver Transmitter. Uses start bit (0), data bits, stop bit (1). Baud rate = bits per second.</p>
+      <p><b>Asynchronous serial format:</b> Start bit + 8 data bits + 1 stop bit = 10 bits per character. 10 char/sec × 11 bits = 110 baud.</p>
+    </div>
+    <div class="concept green"><h3>🖥 I/O Processor (IOP/Channel) <span class="tag imp">DEF</span></h3>
+      <p>IOP = processor with DMA capability that executes its own I/O-specific instructions (channel programs).</p>
+      <ul><li>Accesses memory by cycle stealing</li><li>Unlike DMA, IOP can FETCH and EXECUTE its own instructions</li><li>CPU is master; IOP is slave processor</li><li>CPU initiates channel → IOP operates independently</li></ul>
+    </div>
+  </div>
+
+  <!-- UNIT 4 -->
+  <div class="page" id="page-unit4">
+    <div class="section-title">4️⃣ Unit 4 — RTL, Micro-Operations & Computer Arithmetic</div>
+    <div class="concept amber"><h3>📝 Register Transfer Language (RTL) <span class="tag hot">NOTATION</span></h3>
+      <div class="formula-box">RTL Basic Symbols:
+R2 ← R1          (transfer contents of R1 into R2, non-destructive)
+P: R2 ← R1       (conditional: if P=1, transfer R1 to R2)
+R2(0-7)           (bits 0–7 of register R2)
+MAR, PC, IR, AC  (register names — capital letters)
+Comma (,)        (separates simultaneous micro-operations)
+Colon (:)         (terminates control function)
+
+Key: R2 ← R1 means R1 is COPIED to R2. R1 is NOT changed. R2 is REPLACED.</div>
+      <p><b>4 Types of Micro-Operations:</b></p>
+      <ul><li><b>Register Transfer:</b> R2←R1 (copy)</li><li><b>Arithmetic:</b> ADD, SUB, INCREMENT, DECREMENT</li><li><b>Logic:</b> AND, OR, XOR, NOT (bit manipulation)</li><li><b>Shift:</b> Logical, Circular, Arithmetic shifts</li></ul>
+    </div>
+    <div class="concept"><h3>🔢 Arithmetic Micro-Operations <span class="tag hot">KEY TABLE</span></h3>
+      <table><tr><th>RTL Expression</th><th>Operation</th></tr>
+      <tr><td>R3 ← R1 + R2</td><td>Add R1 and R2, store in R3</td></tr>
+      <tr><td>R3 ← R1 − R2</td><td>Subtract R2 from R1</td></tr>
+      <tr><td>R2 ← R2'</td><td>Complement R2 (1's complement)</td></tr>
+      <tr><td>R2 ← R2' + 1</td><td>2's complement of R2 (negate)</td></tr>
+      <tr><td>R3 ← R1 + R2' + 1</td><td>Subtraction using 2's complement</td></tr>
+      <tr><td>R1 ← R1 + 1</td><td>Increment R1</td></tr>
+      <tr><td>R1 ← R1 − 1</td><td>Decrement R1</td></tr></table>
+      <p><b>Binary Adder-Subtractor:</b> Mode M: M=0 → ADD, M=1 → SUBTRACT (XOR gate + 2's complement trick)</p>
+    </div>
+    <div class="concept cyan"><h3>🔀 Logic Micro-Operations <span class="tag hot">SELECTIVE OPS</span></h3>
+      <table><tr><th>Operation</th><th>RTL</th><th>Effect</th></tr>
+      <tr><td>Selective Set</td><td>A ← A ∨ B</td><td>Bits in A are SET where B=1</td></tr>
+      <tr><td>Selective Complement</td><td>A ← A ⊕ B</td><td>Bits in A COMPLEMENTED where B=1</td></tr>
+      <tr><td>Selective Clear</td><td>A ← A ∧ B'</td><td>Bits in A CLEARED where B=1</td></tr>
+      <tr><td>Mask</td><td>A ← A ∧ B</td><td>Bits in A CLEARED where B=0</td></tr>
+      <tr><td>Clear</td><td>A ← A ⊕ A</td><td>All bits cleared to 0</td></tr>
+      <tr><td>Insert</td><td>A ← (A∧B) ∨ C</td><td>Mask then OR new bits</td></tr></table>
+      <div class="formula-box">EXAM QUESTION from PPT:
+A=1100, B=1010, Selective Complement (A ← A ⊕ B):
+1100 XOR 1010 = 0110  ← Answer
+
+ashr (Arithmetic Shift Right) effect → Division by 2
+ashl (Arithmetic Shift Left) effect → Multiplication by 2</div>
+    </div>
+    <div class="concept green"><h3>↔️ Shift Micro-Operations <span class="tag imp">3 TYPES</span></h3>
+      <div class="compare-grid">
+        <div class="compare-col"><h4>Logical Shift</h4><ul><li>Vacated bit filled with 0</li><li>SHL/SHR</li><li>For unsigned numbers</li></ul></div>
+        <div class="compare-col"><h4>Circular Shift (Rotate)</h4><ul><li>Shifted-out bit fills vacated end</li><li>CIL/CIR (through carry E)</li><li>No bits lost</li></ul></div>
+      </div>
+      <div class="compare-grid" style="margin-top:10px">
+        <div class="compare-col"><h4>Arithmetic Shift</h4><ul><li>Preserves sign bit</li><li>ASHR: fills with sign bit</li><li>ASHL: fills with 0 (may lose bit)</li><li>ASHR = divide by 2, ASHL = multiply by 2</li></ul></div>
+        <div class="compare-col"><h4>Shift Register Types</h4><ul><li>SISO: Serial In, Serial Out</li><li>SIPO: Serial In, Parallel Out</li><li>PISO: Parallel In, Serial Out</li><li>PIPO: Parallel In, Parallel Out</li></ul></div>
+      </div>
+    </div>
+    <div class="concept amber"><h3>✖️ Booth's Multiplication Algorithm <span class="tag hot">NUMERICAL EXAM</span></h3>
+      <p>For signed 2's complement multiplication. Strings of 0s or 1s need only shifts (efficient).</p>
+      <div class="formula-box">Rules (examine current bit Qn and previous bit Q_{n-1}):
+Qn=0, Q(n-1)=0 → No operation (just shift right)
+Qn=1, Q(n-1)=1 → No operation (just shift right)  
+Qn=1, Q(n-1)=0 → SUBTRACT multiplicand (AC ← AC - M)
+Qn=0, Q(n-1)=1 → ADD multiplicand (AC ← AC + M)
+After each step: Arithmetic Right Shift (AC, Q, Q_{n-1})
+
+Initial: Q_{n-1} = 0, AC = 0
+Number of steps = number of bits in multiplier
+
+Example: Multiply +7 (0111) × -3 (1101):
+M = 0111 (multiplicand), Q = 1101 (multiplier)
+Step 0: Q(n-1)=0, Q0=1 → AC←AC-M, then ASHR
+Step 1: examine next bit pair and apply rules...</div>
+      <div class="trap-box"><strong>KEY:</strong> Start with Q(n-1)=0. Strings of 1s: subtract at first 1 (1,0 transition), add at first 0 after (0,1 transition). More efficient than standard multiplication for signed numbers.</div>
+    </div>
+    <div class="concept"><h3>🔢 Number Representations <span class="tag imp">NUMERICAL</span></h3>
+      <div class="formula-box">Represent +9 and -9 in 7-bit:
++9: Signed magnitude = 0 001001 (all three same)
+
+-9: Signed magnitude    = 1 001001
+    Signed 1's complement = 1 110110  (flip all non-sign bits)
+    Signed 2's complement = 1 110111  (1's complement + 1)
+
+2's complement subtraction: A - B = A + (2's complement of B)
+Carry out of MSB in 2's complement is DISCARDED
+Overflow = XOR of last two carries = 1 means overflow occurred</div>
+    </div>
+    <div class="concept green"><h3>📡 HDL (Hardware Description Language) <span class="tag mcq">DEF</span></h3>
+      <p><b>Two main HDLs:</b> VHDL and Verilog. HDL Design Flow: Design → Simulation → Synthesis → Verification.</p>
+      <p><b>EDA Playground:</b> Online simulator. Left window = Testbench (inputs/checking). Right window = Design (Verilog circuit).</p>
+      <p><b>HDL vs Software:</b> HDL describes HARDWARE that runs in PARALLEL. Software = sequential execution. HDL code runs simultaneously (concurrent statements).</p>
+    </div>
+  </div>
+
+  <!-- UNIT 5 -->
+  <div class="page" id="page-unit5">
+    <div class="section-title">5️⃣ Unit 5 — Memory Organization & Virtual Memory</div>
+    <div class="concept amber"><h3>📐 Memory Hierarchy <span class="tag hot">SPEED ORDER</span></h3>
+      <p>Goal: highest speed + lowest cost. Registers are fastest, main memory is middle, secondary storage is slowest.</p>
+      <div class="formula-box">Speed (fast→slow): Registers > Cache > Main Memory (RAM) > Secondary (HDD/SSD)
+Cost (high→low):  Registers > Cache > Main Memory > Secondary
+Size (small→large): Registers < Cache < Main Memory < Secondary
+
+Memory access speed: Register (1ns) > Cache (5ns) > RAM (50ns) > Disk (5ms)</div>
+    </div>
+    <div class="concept"><h3>🗂 Associative Memory (CAM) <span class="tag imp">DEF MCQ</span></h3>
+      <p><b>Content Addressable Memory:</b> Accessed by CONTENT, not address. All words searched SIMULTANEOUSLY (parallel).</p>
+      <ul><li>Each word has: Address field + Data field</li><li>Argument register compared with ALL stored words at once</li><li>Match register indicates which words matched</li><li>Used in: Cache memory mapping, TLB (Translation Lookaside Buffer)</li></ul>
+    </div>
+    <div class="concept cyan"><h3>💾 Cache Memory <span class="tag hot">NUMERICAL EVERY EXAM</span></h3>
+      <p><b>Locality of Reference:</b> Temporal (reuse same data) + Spatial (access nearby data). Cache exploits this.</p>
+      <div class="formula-box">Hit Ratio (h) = number of cache hits / total memory accesses
+
+Effective Access Time:
+Te = h × Tc + (1-h) × (Tc + Tm)
+   = Tc + (1-h) × Tm
+
+Example: Tc=0.4ns, Tm=1.2ns, h=0.85
+Te = 0.4 + (1-0.85) × 1.2 = 0.4 + 0.18 = 0.58ns
+
+TRAP: Formula is Te = Tc + (1-h)×Tm, NOT h×Tc + (1-h)×Tm
+(Cache access Tc is always done first, then if miss, ALSO do Tm)</div>
+    </div>
+    <div class="concept green"><h3>🗺 Cache Mapping Techniques <span class="tag hot">3 TYPES</span></h3>
+      <table><tr><th>Technique</th><th>Flexibility</th><th>Hardware Cost</th><th>Conflict Misses</th><th>Address Division</th></tr>
+      <tr><td>Direct Mapping</td><td>Low (1 cache location per block)</td><td>Low (RAM lookup)</td><td>High</td><td>Tag + Index + Offset</td></tr>
+      <tr><td>Associative Mapping</td><td>High (any block → any line)</td><td>High (CAM, multiple comparators)</td><td>Low</td><td>Tag + Offset</td></tr>
+      <tr><td>Set-Associative</td><td>Medium (block → specific set)</td><td>Medium</td><td>Medium</td><td>Tag + Set Index + Offset</td></tr></table>
+      <div class="formula-box">Direct Mapping:
+Address = Tag | Line Index | Offset
+Cache line = memory_block_number mod (number_of_cache_lines)
+
+Set-Associative with set size 2:
+Each SET has 2 cache lines (2-way associative)</div>
+      <div class="trap-box"><strong>Direct Mapping Disadvantage:</strong> CONFLICT MISSES — two memory blocks that map to the SAME cache line cannot be in cache simultaneously. Associative mapping eliminates this but needs expensive CAM hardware.</div>
+    </div>
+    <div class="concept amber"><h3>✍️ Cache Write Policies <span class="tag imp">MCQ</span></h3>
+      <div class="compare-grid">
+        <div class="compare-col"><h4>Write Through</h4><ul><li>On HIT: Write to BOTH cache AND memory</li><li>On MISS: Write to memory only</li><li>Memory always up-to-date</li><li>Slower (memory access on every write)</li><li>Simple; good for DMA consistency</li></ul></div>
+        <div class="compare-col"><h4>Write Back (Copy-Back)</h4><ul><li>On HIT: Write to CACHE only</li><li>On MISS: Bring block to cache, write there</li><li>Memory may be stale (dirty bit needed)</li><li>Faster (fewer memory writes)</li><li>Must write back on eviction</li></ul></div>
+      </div>
+    </div>
+    <div class="concept"><h3>🌐 Virtual Memory <span class="tag hot">PAGING MCQ</span></h3>
+      <p>Gives programmer illusion of LARGER memory than physically available. Logical address (virtual) → Physical address (real) via page table.</p>
+      <div class="formula-box">Virtual Address = Page Number | Page Offset
+Physical Address = Block/Frame Number | Page Offset
+
+Page Table: Maps virtual page number → physical frame number
+TLB (Translation Lookaside Buffer): Fast cache for page table entries (associative memory)
+
+Page Fault: Referenced page NOT in physical memory → OS loads from disk
+Page Fault Service:
+1. Find page on backing store (disk)
+2. Find free frame (or use replacement algorithm)
+3. Load desired page into frame
+4. Restart the process</div>
+    </div>
+    <div class="concept green"><h3>🔄 Page Replacement Algorithms <span class="tag hot">NUMERICAL</span></h3>
+      <table><tr><th>Algorithm</th><th>Policy</th><th>Advantage</th><th>Disadvantage</th></tr>
+      <tr><td>FIFO</td><td>Replace oldest page</td><td>Simple</td><td>Belady's anomaly, poor performance</td></tr>
+      <tr><td>LRU (Least Recently Used)</td><td>Replace least recently accessed</td><td>Good performance</td><td>Complex hardware needed</td></tr>
+      <tr><td>Optimal (OPT)</td><td>Replace page not used for longest future time</td><td>Best performance</td><td>Impossible (future unknown)</td></tr>
+      <tr><td>LFU</td><td>Replace least frequently used</td><td>Usage-based</td><td>Recent pages may have low count</td></tr></table>
+    </div>
+    <div class="concept amber"><h3>💿 Auxiliary Memory (Secondary Storage) <span class="tag imp">DEF</span></h3>
+      <p>Non-volatile, high-capacity, low-cost. NOT directly accessible by CPU. Data retained when power off.</p>
+      <p><b>Magnetic Disk Organization:</b> Concentric tracks → sectors → cylinders. Disk access time = Seek time + Rotational latency + Transfer time.</p>
+    </div>
+  </div>
+
+  <!-- UNIT 6 -->
+  <div class="page" id="page-unit6">
+    <div class="section-title">6️⃣ Unit 6 — Pipelining, Parallel Processing & Modern Architecture</div>
+    <div class="concept amber"><h3>🚀 Pipelining <span class="tag hot">SPEEDUP MCQ</span></h3>
+      <p>Decompose sequential process into sub-operations, each in a dedicated stage, all running CONCURRENTLY.</p>
+      <div class="formula-box">5-Stage RISC Pipeline: IF → ID → EX → MEM → WB
+IF  = Instruction Fetch (read from memory at PC)
+ID  = Instruction Decode (decode + read registers)
+EX  = Execute (ALU operations)
+MEM = Memory Access (load/store from/to memory)
+WB  = Write Back (write result to register)
+
+Speedup = n × k / (k + n - 1)
+where k = number of pipeline stages
+      n = number of instructions
+As n → ∞, Speedup → k (ideal = number of stages)
+
+Pipeline Hazards:
+1. Structural Hazard: Two instructions need same hardware
+2. Data Hazard: Instruction needs result of previous (RAW, WAR, WAW)
+3. Control Hazard: Branch instruction changes PC unexpectedly</div>
+    </div>
+    <div class="concept"><h3>🏁 Flynn's Classification <span class="tag hot">SISD/SIMD/MISD/MIMD</span></h3>
+      <table><tr><th>Type</th><th>Instruction Streams</th><th>Data Streams</th><th>Example</th></tr>
+      <tr><td>SISD</td><td>Single</td><td>Single</td><td>Traditional uniprocessor (von Neumann)</td></tr>
+      <tr><td>SIMD</td><td>Single</td><td>Multiple</td><td>Vector processors, GPU, multimedia extensions</td></tr>
+      <tr><td>MISD</td><td>Multiple</td><td>Single</td><td>Theoretical, fault-tolerant pipelines (rare)</td></tr>
+      <tr><td>MIMD</td><td>Multiple</td><td>Multiple</td><td>Multiprocessors, distributed systems, clusters</td></tr></table>
+    </div>
+    <div class="concept cyan"><h3>🖥 Multiprocessors <span class="tag imp">TYPES</span></h3>
+      <div class="compare-grid">
+        <div class="compare-col"><h4>Symmetric (SMP)</h4><ul><li>Each CPU has same OS copy</li><li>Peer-to-peer (no master-slave)</li><li>All CPUs share memory equally</li><li>Example: Encore Multimax</li></ul></div>
+        <div class="compare-col"><h4>Asymmetric</h4><ul><li>Each CPU has predefined task</li><li>Master-slave relationship</li><li>Master controls all others</li><li>Cheaper option</li></ul></div>
+      </div>
+      <div class="compare-grid" style="margin-top:10px">
+        <div class="compare-col"><h4>Tightly Coupled</h4><ul><li>Synchronized communication</li><li>Shared memory system</li><li>Low overhead</li></ul></div>
+        <div class="compare-col"><h4>Loosely Coupled</h4><ul><li>Message passing</li><li>Distributed memory</li><li>High overhead for data exchange</li></ul></div>
+      </div>
+    </div>
+    <div class="concept green"><h3>🔗 Interconnection Structures <span class="tag imp">3 TYPES</span></h3>
+      <table><tr><th>Type</th><th>How It Works</th><th>Advantage</th><th>Disadvantage</th></tr>
+      <tr><td>Time-Shared Bus</td><td>Single bus; only one CPU accesses memory at a time</td><td>Simple, economical</td><td>Limited by single bus speed</td></tr>
+      <tr><td>Multiport Memory</td><td>Separate bus between each memory module and each CPU</td><td>High transfer rate</td><td>Expensive memory control logic</td></tr>
+      <tr><td>Crossbar Switch</td><td>Crosspoints at intersections of processor and memory paths</td><td>Simultaneous transfers</td><td>Very complex and expensive hardware</td></tr></table>
+    </div>
+    <div class="concept amber"><h3>🎮 GPU Architecture <span class="tag mcq">MODERN</span></h3>
+      <ul><li><b>GPU:</b> Designed for parallel processing of graphics/compute. Hundreds of simpler cores vs CPU's few complex cores.</li><li><b>Integrated GPU:</b> On same chip as CPU, shares system RAM</li><li><b>Discrete GPU:</b> Separate card with own VRAM</li><li><b>NVIDIA CUDA:</b> Parallel computing platform for GPU-accelerated computing</li><li><b>GPU advantages:</b> Massively parallel, faster than CPU for parallel tasks (ML, rendering)</li></ul>
+    </div>
+    <div class="concept"><h3>📱 ARM & SoC Architecture <span class="tag mcq">MODERN</span></h3>
+      <ul><li><b>ARM:</b> RISC-based, 32/64-bit, low power, used in smartphones/tablets. Fewer transistors = smaller, more efficient.</li><li><b>SoC (System on Chip):</b> CPU + GPU + RAM + I/O all on one chip (e.g., Apple A17, Snapdragon)</li><li><b>Quantum Computing:</b> Uses qubits (superposition of 0 AND 1). Exponentially faster for specific problems (cryptography, optimization).</li></ul>
+    </div>
+  </div>
+
+  <!-- CHEAT SHEETS -->
+  <div class="page" id="page-cheatsheet">
+    <div class="section-title">📋 Cheat Sheets — CSE211</div>
+    <div class="cheat-grid">
+      <div class="cheat-card"><h3>⏱ Instruction Cycle Timing</h3>
+        <div class="cheat-item"><span class="cheat-key">T0</span><span class="cheat-val">AR ← PC (load address register)</span></div>
+        <div class="cheat-item"><span class="cheat-key">T1</span><span class="cheat-val">IR ← M[AR], PC ← PC+1 (fetch)</span></div>
+        <div class="cheat-item"><span class="cheat-key">T2</span><span class="cheat-val">Decode IR, AR ← IR(0-11), I ← IR(15)</span></div>
+        <div class="cheat-item"><span class="cheat-key">T3 (Indirect)</span><span class="cheat-val">AR ← M[AR] (get effective address)</span></div>
+        <div class="cheat-item"><span class="cheat-key">T4 (AND)</span><span class="cheat-val">DR ← M[AR]</span></div>
+        <div class="cheat-item"><span class="cheat-key">T5 (AND)</span><span class="cheat-val">AC ← AC ∧ DR, SC ← 0</span></div>
+        <div class="cheat-item"><span class="cheat-key">T4 (ADD)</span><span class="cheat-val">DR ← M[AR]</span></div>
+        <div class="cheat-item"><span class="cheat-key">T5 (ADD)</span><span class="cheat-val">AC ← AC + DR, E ← Cout, SC ← 0</span></div>
+      </div>
+      <div class="cheat-card"><h3>📋 Register Summary</h3>
+        <div class="cheat-item"><span class="cheat-key">PC (12-bit)</span><span class="cheat-val">Address of NEXT instruction</span></div>
+        <div class="cheat-item"><span class="cheat-key">AR (12-bit)</span><span class="cheat-val">Current memory address</span></div>
+        <div class="cheat-item"><span class="cheat-key">IR (16-bit)</span><span class="cheat-val">Current instruction being decoded</span></div>
+        <div class="cheat-item"><span class="cheat-key">DR (16-bit)</span><span class="cheat-val">Memory data buffer</span></div>
+        <div class="cheat-item"><span class="cheat-key">AC (16-bit)</span><span class="cheat-val">General purpose accumulator</span></div>
+        <div class="cheat-item"><span class="cheat-key">TR (16-bit)</span><span class="cheat-val">Temporary register</span></div>
+        <div class="cheat-item"><span class="cheat-key">INPR/OUTR</span><span class="cheat-val">8-bit I/O character registers</span></div>
+        <div class="cheat-item"><span class="cheat-key">SC (4-bit)</span><span class="cheat-val">Sequence counter → T0–T15</span></div>
+      </div>
+      <div class="cheat-card"><h3>🎯 Addressing Modes EA</h3>
+        <div class="cheat-item"><span class="cheat-key">Implied</span><span class="cheat-val">EA = AC or Stack (no address field)</span></div>
+        <div class="cheat-item"><span class="cheat-key">Immediate</span><span class="cheat-val">Operand is the address field itself</span></div>
+        <div class="cheat-item"><span class="cheat-key">Direct</span><span class="cheat-val">EA = IR(address field)</span></div>
+        <div class="cheat-item"><span class="cheat-key">Indirect</span><span class="cheat-val">EA = M[IR(address field)]</span></div>
+        <div class="cheat-item"><span class="cheat-key">Register</span><span class="cheat-val">EA = register</span></div>
+        <div class="cheat-item"><span class="cheat-key">Reg. Indirect</span><span class="cheat-val">EA = M[register]</span></div>
+        <div class="cheat-item"><span class="cheat-key">PC Relative</span><span class="cheat-val">EA = PC + offset</span></div>
+        <div class="cheat-item"><span class="cheat-key">Indexed</span><span class="cheat-val">EA = Index Reg + offset</span></div>
+      </div>
+      <div class="cheat-card"><h3>⚡ RISC vs CISC</h3>
+        <div class="cheat-item"><span class="cheat-key">RISC Control</span><span class="cheat-val">Hardwired (fast)</span></div>
+        <div class="cheat-item"><span class="cheat-key">CISC Control</span><span class="cheat-val">Microprogrammed</span></div>
+        <div class="cheat-item"><span class="cheat-key">RISC Instr</span><span class="cheat-val">Fixed length, single cycle</span></div>
+        <div class="cheat-item"><span class="cheat-key">CISC Instr</span><span class="cheat-val">Variable length, multi-cycle</span></div>
+        <div class="cheat-item"><span class="cheat-key">RISC Mem</span><span class="cheat-val">Only LOAD/STORE access memory</span></div>
+        <div class="cheat-item"><span class="cheat-key">CISC Mem</span><span class="cheat-val">Memory-to-memory operations</span></div>
+        <div class="cheat-item"><span class="cheat-key">RISC Pipe</span><span class="cheat-val">Excellent pipelining</span></div>
+        <div class="cheat-item"><span class="cheat-key">CISC Pipe</span><span class="cheat-val">Difficult due to variable format</span></div>
+      </div>
+      <div class="cheat-card"><h3>💾 Cache Mapping</h3>
+        <div class="cheat-item"><span class="cheat-key">Direct</span><span class="cheat-val">1 block → 1 cache line. Tag+Index+Offset. Conflict misses!</span></div>
+        <div class="cheat-item"><span class="cheat-key">Associative</span><span class="cheat-val">Any block → any line. Tag+Offset. CAM. Most flexible.</span></div>
+        <div class="cheat-item"><span class="cheat-key">Set-Assoc</span><span class="cheat-val">Block → specific SET. Tag+SetIndex+Offset. Compromise.</span></div>
+        <div class="cheat-item"><span class="cheat-key">Hit Ratio h</span><span class="cheat-val">Cache hits / total accesses</span></div>
+        <div class="cheat-item"><span class="cheat-key">Te formula</span><span class="cheat-val">Tc + (1-h) × Tm</span></div>
+        <div class="cheat-item"><span class="cheat-key">Write Through</span><span class="cheat-val">Write cache AND memory always</span></div>
+        <div class="cheat-item"><span class="cheat-key">Write Back</span><span class="cheat-val">Write cache only; memory on evict</span></div>
+      </div>
+      <div class="cheat-card"><h3>📡 I/O Transfer Modes</h3>
+        <div class="cheat-item"><span class="cheat-key">Programmed</span><span class="cheat-val">CPU polls (busy-wait). Wasteful.</span></div>
+        <div class="cheat-item"><span class="cheat-key">Interrupt</span><span class="cheat-val">CPU free; device signals when ready</span></div>
+        <div class="cheat-item"><span class="cheat-key">DMA</span><span class="cheat-val">Direct memory↔device. CPU initializes then free.</span></div>
+        <div class="cheat-item"><span class="cheat-key">Burst DMA</span><span class="cheat-val">Entire block at once. CPU blocked.</span></div>
+        <div class="cheat-item"><span class="cheat-key">Cycle Steal</span><span class="cheat-val">One word at a time. CPU delayed briefly.</span></div>
+        <div class="cheat-item"><span class="cheat-key">Daisy Chain</span><span class="cheat-val">Serial priority. Closest device = highest priority.</span></div>
+        <div class="cheat-item"><span class="cheat-key">Polling</span><span class="cheat-val">Software priority. Flexible but slow.</span></div>
+      </div>
+    </div>
+    <div class="section-title">🌙 One-Night-Before — 20 Must-Know Points</div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;font-size:.8rem;line-height:2.1">
+      <p>1. Fetch cycle: T0=AR←PC, T1=IR←M[AR]+PC←PC+1, T2=Decode. Always these 3 steps.</p>
+      <p>2. PC holds NEXT instruction address. IR holds CURRENT instruction. AR = memory address buffer.</p>
+      <p>3. Register Reference: opcode=111, I=0. I/O Instructions: opcode=111, I=1. Others = Memory Reference.</p>
+      <p>4. Direct EA = address field. Indirect EA = M[address field]. PC Relative EA = PC + offset. Indexed EA = IX + offset.</p>
+      <p>5. Stack PUSH: SP←SP-1, M[SP]←DR. POP: DR←M[SP], SP←SP+1. Stack grows DOWNWARD.</p>
+      <p>6. RISC = hardwired, fixed-length, load-store only, few modes, single cycle.</p>
+      <p>7. CISC = microprogrammed, variable-length, memory-to-memory, many modes, multi-cycle.</p>
+      <p>8. Cache Te = Tc + (1-h)×Tm. Example: Tc=0.4, Tm=1.2, h=0.85 → Te=0.58ns.</p>
+      <p>9. Direct mapping: conflict misses (same cache line). Associative: most flexible (CAM hardware). Set-associative: compromise.</p>
+      <p>10. Write Through: always writes memory (consistent). Write Back: only writes cache (faster, needs dirty bit).</p>
+      <p>11. Virtual Memory: virtual page number → physical frame via page table. Page fault = page not in RAM → load from disk.</p>
+      <p>12. Page replacement: LRU = least recently used (best practical). OPT = optimal (theoretical). FIFO = simple but Belady's anomaly.</p>
+      <p>13. DMA: direct memory-to-device transfer without CPU. Programmed I/O: CPU polls (busy). Interrupt I/O: CPU notified.</p>
+      <p>14. Daisy Chain: highest priority = device closest to CPU. PI=1, PO=0 = device IS requesting interrupt.</p>
+      <p>15. Booth's Algorithm: 10 transition → SUBTRACT M. 01 transition → ADD M. 00/11 → just ASHR.</p>
+      <p>16. Flynn's: SISD=traditional CPU. SIMD=GPU/vector. MISD=theoretical. MIMD=multiprocessors.</p>
+      <p>17. Pipeline speedup → k as n→∞ (k = stages). 5-stage RISC: IF→ID→EX→MEM→WB.</p>
+      <p>18. Selective Complement = XOR. Selective Set = OR. Selective Clear = AND with complement B. Mask = AND.</p>
+      <p>19. Memory-Mapped I/O: devices share memory address space. Isolated I/O: separate address space, separate IN/OUT instructions.</p>
+      <p>20. 3-address: short programs, long instructions. 0-address (stack): long programs, short instructions. 1-address uses implied AC.</p>
+    </div>
+  </div>
+
+  <!-- FORMULA SHEET -->
+  <div class="page" id="page-formulas">
+    <div class="section-title">🔢 Formula & Definition Sheet — CSE211</div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:18px">
+      <div class="formula-row"><div class="formula-name">Cache Hit Time</div><div class="formula-expr">Te = Tc + (1-h) × Tm</div></div>
+      <div class="formula-row"><div class="formula-name">Hit Ratio</div><div class="formula-expr">h = cache_hits / total_accesses</div></div>
+      <div class="formula-row"><div class="formula-name">Miss Rate</div><div class="formula-expr">1 - h</div></div>
+      <div class="formula-row"><div class="formula-name">Pipeline Speedup</div><div class="formula-expr">S = (n×k) / (k + n - 1)</div></div>
+      <div class="formula-row"><div class="formula-name">Ideal Speedup</div><div class="formula-expr">S → k (as n → ∞)</div></div>
+      <div class="formula-row"><div class="formula-name">Memory Locations</div><div class="formula-expr">2^n locations for n-bit address</div></div>
+      <div class="formula-row"><div class="formula-name">Opcode combinations</div><div class="formula-expr">2^k for k opcode bits</div></div>
+      <div class="formula-row"><div class="formula-name">Bus select lines</div><div class="formula-expr">log₂(number_of_registers)</div></div>
+      <div class="formula-row"><div class="formula-name">PC Relative EA</div><div class="formula-expr">EA = PC + offset</div></div>
+      <div class="formula-row"><div class="formula-name">Indexed EA</div><div class="formula-expr">EA = Index_Register + offset</div></div>
+      <div class="formula-row"><div class="formula-name">Base Register EA</div><div class="formula-expr">EA = Base_Address_Register + offset</div></div>
+      <div class="formula-row"><div class="formula-name">Indirect EA</div><div class="formula-expr">EA = M[address_field]</div></div>
+      <div class="formula-row"><div class="formula-name">Stack PUSH</div><div class="formula-expr">SP ← SP-1, M[SP] ← DR</div></div>
+      <div class="formula-row"><div class="formula-name">Stack POP</div><div class="formula-expr">DR ← M[SP], SP ← SP+1</div></div>
+      <div class="formula-row"><div class="formula-name">2's Complement</div><div class="formula-expr">1's complement + 1</div></div>
+      <div class="formula-row"><div class="formula-name">1's Complement</div><div class="formula-expr">Flip all bits (0↔1)</div></div>
+      <div class="formula-row"><div class="formula-name">Overflow (signed)</div><div class="formula-expr">V = C_{n-1} XOR C_{n} (last two carries)</div></div>
+      <div class="formula-row"><div class="formula-name">Selective Set</div><div class="formula-expr">A ← A ∨ B</div></div>
+      <div class="formula-row"><div class="formula-name">Selective Comp.</div><div class="formula-expr">A ← A ⊕ B</div></div>
+      <div class="formula-row"><div class="formula-name">Selective Clear</div><div class="formula-expr">A ← A ∧ B'</div></div>
+      <div class="formula-row"><div class="formula-name">Mask Operation</div><div class="formula-expr">A ← A ∧ B</div></div>
+      <div class="formula-row"><div class="formula-name">ASHR effect</div><div class="formula-expr">Divide by 2 (arithmetic right shift)</div></div>
+      <div class="formula-row"><div class="formula-name">ASHL effect</div><div class="formula-expr">Multiply by 2 (arithmetic left shift)</div></div>
+      <div class="formula-row"><div class="formula-name">Baud Rate (UART)</div><div class="formula-expr">bits_per_char × chars_per_second</div></div>
+      <div class="formula-row"><div class="formula-name">3-addr register bits</div><div class="formula-expr">3 × log₂(num_registers)</div></div>
+      <div class="formula-row"><div class="formula-name">Interrupt condition</div><div class="formula-expr">IEN = 1 AND (FGI = 1 OR FGO = 1)</div></div>
+      <div class="formula-row"><div class="formula-name">Common bus lines</div><div class="formula-expr">S2,S1,S0 → 8 selections (2³)</div></div>
+      <div class="formula-row"><div class="formula-name">Basic Computer memory</div><div class="formula-expr">4096 words × 16 bits (12-bit addr)</div></div>
+    </div>
+  </div>
+
+  <!-- TOP 100 -->
+  <div class="page" id="page-top100">
+    <div class="section-title">🏆 Top 100 Most Important Points — CSE211</div>
+    <div class="top100-grid" id="top100Container"></div>
+  </div>
+
+  <!-- COMPARISON TABLES -->
+  <div class="page" id="page-compare">
+    <div class="section-title">⚖️ Master Comparison Tables — CSE211</div>
+    <div class="section-title" style="font-size:.95rem">Memory Types Comparison</div>
+    <table><tr><th>Type</th><th>Speed</th><th>Cost</th><th>Volatility</th><th>CPU Access</th><th>Size</th></tr>
+    <tr><td>Registers</td><td>Fastest</td><td>Highest</td><td>Volatile</td><td>Direct</td><td>Bytes</td></tr>
+    <tr><td>Cache Memory</td><td>Very Fast</td><td>High</td><td>Volatile</td><td>Direct (SRAM)</td><td>KB–MB</td></tr>
+    <tr><td>Main Memory (RAM)</td><td>Fast</td><td>Medium</td><td>Volatile</td><td>Direct</td><td>GB</td></tr>
+    <tr><td>Secondary (HDD/SSD)</td><td>Slow</td><td>Low</td><td>Non-volatile</td><td>Through OS</td><td>TB</td></tr></table>
+
+    <div class="section-title" style="font-size:.95rem">Cache Mapping Comparison</div>
+    <table><tr><th>Feature</th><th>Direct Mapping</th><th>Associative Mapping</th><th>Set-Associative</th></tr>
+    <tr><td>Placement</td><td>Block → one specific cache line</td><td>Block → any cache line</td><td>Block → one specific SET</td></tr>
+    <tr><td>Address</td><td>Tag + Index + Offset</td><td>Tag + Offset</td><td>Tag + Set Index + Offset</td></tr>
+    <tr><td>Hardware</td><td>Simple RAM lookup</td><td>CAM (all tags compared simultaneously)</td><td>Multiple comparators per set</td></tr>
+    <tr><td>Conflict Misses</td><td>High</td><td>None (most flexible)</td><td>Low-Medium</td></tr>
+    <tr><td>Cost</td><td>Cheapest</td><td>Most Expensive</td><td>Medium</td></tr>
+    <tr><td>Miss Penalty</td><td>High if conflict</td><td>Lowest</td><td>Medium</td></tr></table>
+
+    <div class="section-title" style="font-size:.95rem">I/O Transfer Modes Comparison</div>
+    <table><tr><th>Mode</th><th>CPU Role</th><th>Mechanism</th><th>Efficiency</th><th>Best For</th></tr>
+    <tr><td>Programmed I/O</td><td>Continuously polls device</td><td>Busy-wait loop</td><td>Very Low</td><td>Simple/slow devices</td></tr>
+    <tr><td>Interrupt-Driven I/O</td><td>Does other work; interrupted when device ready</td><td>Hardware interrupt signal</td><td>Medium</td><td>Most I/O devices</td></tr>
+    <tr><td>DMA</td><td>Only initializes; free during transfer</td><td>DMA controller manages bus</td><td>High</td><td>High-speed (disk, video)</td></tr>
+    <tr><td>IOP/Channel</td><td>Initiates; IOP handles everything</td><td>IOP fetches its own instructions</td><td>Highest</td><td>Large systems</td></tr></table>
+
+    <div class="section-title" style="font-size:.95rem">Instruction Format Comparison</div>
+    <table><tr><th>Format</th><th>Addresses</th><th>Program Length</th><th>Instruction Length</th><th>Organization</th></tr>
+    <tr><td>3-Address</td><td>3 (src1, src2, dest)</td><td>Shortest programs</td><td>Longest instructions</td><td>General register</td></tr>
+    <tr><td>2-Address</td><td>2 (src/dest, src)</td><td>Medium</td><td>Medium</td><td>General register</td></tr>
+    <tr><td>1-Address</td><td>1 (uses implied AC)</td><td>Medium-long</td><td>Short</td><td>Accumulator</td></tr>
+    <tr><td>0-Address</td><td>0 (uses stack)</td><td>Longest programs</td><td>Shortest instructions</td><td>Stack</td></tr></table>
+
+    <div class="section-title" style="font-size:.95rem">Flynn's Taxonomy</div>
+    <table><tr><th>Class</th><th>Instructions</th><th>Data</th><th>Example</th><th>Description</th></tr>
+    <tr><td>SISD</td><td>Single</td><td>Single</td><td>Traditional uniprocessor</td><td>Von Neumann, sequential</td></tr>
+    <tr><td>SIMD</td><td>Single</td><td>Multiple</td><td>GPU, Vector processor</td><td>Same operation, different data</td></tr>
+    <tr><td>MISD</td><td>Multiple</td><td>Single</td><td>Fault-tolerant systems</td><td>Theoretical/rare</td></tr>
+    <tr><td>MIMD</td><td>Multiple</td><td>Multiple</td><td>Multiprocessors, clusters</td><td>Most powerful, independent CPUs</td></tr></table>
+
+    <div class="section-title" style="font-size:.95rem">Page Replacement Algorithms</div>
+    <table><tr><th>Algorithm</th><th>Rule</th><th>Pros</th><th>Cons</th></tr>
+    <tr><td>FIFO</td><td>Replace oldest (first loaded) page</td><td>Simple to implement</td><td>Belady's anomaly; poor performance</td></tr>
+    <tr><td>LRU</td><td>Replace least recently used page</td><td>Good performance, no Belady's</td><td>Complex hardware (counter/stack needed)</td></tr>
+    <tr><td>OPT/Belady</td><td>Replace page not used for longest future time</td><td>Best possible performance</td><td>Impossible in practice (need future knowledge)</td></tr>
+    <tr><td>LFU</td><td>Replace least frequently accessed</td><td>Usage-count based</td><td>Old pages with high historical count stay</td></tr></table>
+  </div>
+
+  <!-- FLASHCARDS -->
+  <div class="page" id="page-flashcards">
+    <div class="section-title">🃏 Flashcards — Click to Flip</div>
+    <div class="flashcard-container">
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="flashcard-front" id="fcFront">Loading...</div>
+        <div class="flashcard-back" id="fcBack">Loading...</div>
+      </div>
+    </div>
+    <div class="flashcard-nav">
+      <button class="btn btn-secondary" onclick="prevCard()">← Prev</button>
+      <div class="fc-counter" id="fcCounter">1 / 40</div>
+      <button class="btn btn-secondary" onclick="nextCard()">Next →</button>
+      <button class="btn btn-primary" onclick="shuffleCards()">🔀 Shuffle</button>
+    </div>
+    <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:5px" id="cardGrid"></div>
+  </div>
+
+  <!-- MCQ BANK -->
+  <div class="page" id="page-mcq">
+    <div class="section-title">❓ MCQ Bank — 100+ Questions (CSE211)</div>
+    <div class="mcq-filters">
+      <button class="filter-btn active" onclick="filterMCQ('all',this)">All</button>
+      <button class="filter-btn" onclick="filterMCQ('unit1',this)">Unit 1</button>
+      <button class="filter-btn" onclick="filterMCQ('unit2',this)">Unit 2</button>
+      <button class="filter-btn" onclick="filterMCQ('unit3',this)">Unit 3</button>
+      <button class="filter-btn" onclick="filterMCQ('unit4',this)">Unit 4</button>
+      <button class="filter-btn" onclick="filterMCQ('unit5',this)">Unit 5</button>
+      <button class="filter-btn" onclick="filterMCQ('unit6',this)">Unit 6</button>
+      <button class="filter-btn" onclick="filterMCQ('numerical',this)">🔢 Numerical</button>
+      <button class="filter-btn" onclick="filterMCQ('tricky',this)">⚠️ Tricky</button>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="mcqProgressBar" style="width:0%"></div></div>
+    <div id="mcqContainer"></div>
+    <div style="display:flex;gap:9px;margin-top:18px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="shuffleMCQ()">🔀 Shuffle</button>
+      <button class="btn btn-secondary" onclick="resetMCQ()">↺ Reset</button>
+    </div>
+  </div>
+
+  <!-- MOCK TEST -->
+  <div class="page" id="page-mocktest">
+    <div class="section-title">📝 Mock Test — 30 Questions / 30 Minutes</div>
+    <div id="mockSetup">
+      <div class="concept amber"><h3>📋 Instructions</h3>
+        <ul><li>30 MCQs covering all 6 units of CSE211</li><li>Based on your actual MCQ bank and PYQ patterns</li><li>Timer: 30 minutes</li><li>Submit any time or let timer run out</li></ul>
+      </div>
+      <button class="btn btn-primary" style="padding:11px 26px;font-size:.95rem;margin-top:14px" onclick="startMock()">🚀 Start Mock Test</button>
+    </div>
+    <div id="mockTest" style="display:none">
+      <div class="mock-header">
+        <div><div id="mockProgress" style="font-size:.88rem;color:var(--text2)">Question 1 of 30</div><div style="font-size:.75rem;color:var(--text3);margin-top:3px">Score: <span id="mockScore">0</span> | Attempted: <span id="mockAttempted">0</span></div></div>
+        <div class="mock-timer" id="mockTimer">30:00</div>
+      </div>
+      <div class="question-grid" id="questionGrid"></div>
+      <div id="mockQuestion"></div>
+      <div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap">
+        <button class="btn btn-secondary" onclick="mockNav(-1)" id="prevBtn">← Prev</button>
+        <button class="btn btn-secondary" onclick="mockNav(1)" id="nextBtn">Next →</button>
+        <button class="btn btn-primary" onclick="submitMock()" style="margin-left:auto">📊 Submit & Results</button>
+      </div>
+    </div>
+    <div id="mockResult" style="display:none"></div>
+  </div>
+</div>
+</div>
+
+<script>
+// ============================================================
+// TOP 100 DATA
+// ============================================================
+const top100Data = [
+  "Computer Organization = HOW computer does it (internal hardware). Architecture = WHAT it can do (ISA, visible to programmer).",
+  "Basic Computer has 4096 × 16 memory. 12-bit address → 2¹² = 4096 locations. 16-bit words.",
+  "Instruction Format (16-bit): Bit15=I (0=Direct, 1=Indirect), Bits14-12=Opcode (3-bits→8 opcodes), Bits11-0=Address (12-bit).",
+  "Fetch Cycle ALWAYS: T0=AR←PC, T1=IR←M[AR]+PC←PC+1, T2=Decode IR, AR←IR(0-11), I←IR(15).",
+  "PC holds address of NEXT instruction. IR holds CURRENT instruction being decoded/executed.",
+  "Register Reference Instructions: opcode=111 (D7=1), I=0. I/O Instructions: opcode=111 (D7=1), I=1.",
+  "Memory Reference Instructions: AND(000), ADD(001), LDA(010), STA(011), BUN(100), BSA(101), ISZ(110).",
+  "CLA=clear AC, CLE=clear E, CMA=complement AC, CME=complement E, INC=increment AC, HLT=halt.",
+  "Common Bus: 3 selection lines S2,S1,S0. 000=none, 001=AR, 010=PC, 011=DR, 100=AC, 101=IR, 110=TR, 111=Memory.",
+  "Interrupt Cycle trigger: IEN=1 AND (FGI=1 OR FGO=1). FGI=1 means new input ready. FGO=1 means output ready.",
+  "Interrupt Cycle: AR←0, TR←PC, M[AR]←TR, PC←0, PC←PC+1, IEN←0, R←0. Return address stored at M[0].",
+  "IEN cleared during interrupt cycle to prevent nested interrupts. R flip-flop clears at end of interrupt cycle.",
+  "General Register Organization: Control Word = SELA(3) + SELB(3) + SELD(3) + OPR(5) = 14 bits total.",
+  "Stack PUSH: SP←SP-1, M[SP]←DR. Stack POP: DR←M[SP], SP←SP+1. SP points to TOP. Stack grows DOWNWARD.",
+  "Stack Overflow: PUSH when stack full. Stack Underflow: POP when stack empty (EMPTY flag =1).",
+  "RPN (Reverse Polish Notation): Suitable for stack. (A+B)×(C+D) in postfix = A B + C D + ×.",
+  "3-Address: shortest programs, longest instructions. 0-Address (stack machine): longest programs, shortest instructions.",
+  "Direct Addressing: EA = address field of instruction. Fastest memory mode but limited address range.",
+  "Indirect Addressing: EA = M[address field]. Extra memory access but supports larger address space.",
+  "PC Relative: EA = PC + offset. Example: PC=400, offset=20 → EA=420.",
+  "Indexed Addressing: EA = Index Register + address field. Useful for ARRAY PROCESSING.",
+  "Base Register Addressing: EA = Base Address Register + address field. Used for RELOCATION.",
+  "Register Indirect: EA = content of specified register. Saves instruction bits (register address shorter than memory address).",
+  "RISC: hardwired control, fixed-length instructions, only LOAD/STORE access memory, few addressing modes, single-cycle.",
+  "CISC: microprogrammed control, variable-length, memory-to-memory ops, complex addressing, multi-cycle.",
+  "External Interrupts: I/O device, timing device, power failure. Internal (Traps): stack overflow, divide by zero, opcode violation.",
+  "PSW Flags: C=carry, S=sign (MSB of result), Z=zero (all zeros), V=overflow (XOR of last two carries).",
+  "Overflow occurs when signed addition result exceeds range (two positives → negative, or two negatives → positive).",
+  "Subroutine: initiated by instruction, PC only saved. Interrupt: initiated by HW, entire CPU state saved.",
+  "I/O Interface: resolves speed mismatch, format difference, operating mode differences between CPU and peripherals.",
+  "4 I/O commands: Control (activate device), Status (test device), Data Output (bus→interface), Data Input (peripheral→interface).",
+  "Memory-Mapped I/O: I/O and memory SHARE same address space. No separate IN/OUT instructions. Same memory ops used.",
+  "Isolated I/O: separate address space. Distinct IN/OUT instructions. Fewer address lines needed for I/O devices.",
+  "Programmed I/O: CPU busy-waits (polls device). Simple but CPU wasteful. Good for slow devices.",
+  "Interrupt-Driven I/O: CPU freed; device interrupts when ready. Better than polling. CPU context switch overhead.",
+  "DMA: transfers entire block directly memory↔device without CPU. CPU only initializes (address + word count + control).",
+  "Burst Transfer DMA: entire block at once, CPU bus denied. Cycle Stealing DMA: one word at a time, CPU briefly delayed.",
+  "Daisy Chain: serial connection. Closest device = highest priority. PI=1,PO=0 = device IS requesting interrupt.",
+  "If device has NO pending interrupt in daisy chain: PI=1, PO=1 (passes priority through to next device).",
+  "IOP (I/O Processor/Channel): unlike DMA, can fetch and execute its own I/O instructions. CPU is master, IOP is slave.",
+  "RTL Transfer: R2 ← R1 means R1 COPIED to R2. R1 unchanged. R2 REPLACED. Non-destructive read, destructive write.",
+  "Conditional Transfer: P: R2 ← R1 means IF P=1, THEN R2←R1.",
+  "4 types of micro-operations: Register Transfer, Arithmetic, Logic, Shift.",
+  "Selective Set: A←A∨B (set bits where B=1). Selective Complement: A←A⊕B (flip bits where B=1).",
+  "Selective Clear: A←A∧B' (clear bits where B=1). Mask: A←A∧B (clear bits where B=0).",
+  "Arithmetic Shift Right (ASHR): divides by 2, fills with sign bit. ASHL: multiplies by 2, fills with 0.",
+  "Shift Register types: SISO (serial-in/out), SIPO (serial-in/parallel-out), PISO, PIPO.",
+  "Parallel Load: all bits loaded simultaneously on clock pulse. Serial Load: one bit at a time.",
+  "2's complement of number = 1's complement + 1. Used for subtraction in computers.",
+  "Signed magnitude -9 (7-bit): 1 001001. 1's complement: 1 110110. 2's complement: 1 110111.",
+  "Binary Adder-Subtractor: M=0 → ADD (A+B), M=1 → SUBTRACT (A+B'+1 = A-B). XOR gates flip B when M=1.",
+  "Booth's Algorithm: 10 transition → SUBTRACT M. 01 transition → ADD M. 00 or 11 → just ASHR. Start Q(n-1)=0.",
+  "Booth's strings of 1s: subtract at first 1 (bit changes to 1 from 0), add at first 0 (bit changes to 0 from 1).",
+  "HDL Design Flow: Design → Simulation → Synthesis → Verification. VHDL and Verilog are the two main HDLs.",
+  "Memory Hierarchy (fast→slow): Registers > Cache > RAM > Secondary Storage. Cost is inversely related to speed.",
+  "Associative Memory (CAM): accessed by CONTENT not address. ALL words searched SIMULTANEOUSLY. Used in cache TLB.",
+  "Cache Hit Ratio h = cache_hits / total_accesses. Effective time Te = Tc + (1-h)×Tm.",
+  "Cache example: Tc=0.4ns, Tm=1.2ns, h=0.85 → Te = 0.4 + (0.15×1.2) = 0.4+0.18 = 0.58ns.",
+  "Direct Mapping: each memory block maps to ONE cache line. Address = Tag + Index + Offset. Suffers conflict misses.",
+  "Associative Mapping: any block → any cache line. Most flexible. Uses CAM (expensive). No conflict misses.",
+  "Set-Associative Mapping: block → specific SET containing k lines. Compromise between direct and associative.",
+  "Write Through: hit → write cache AND memory. Miss → write memory. Memory always updated. Slower.",
+  "Write Back: hit → write CACHE ONLY. Memory updated only on eviction. Faster. Memory may be stale.",
+  "Virtual Memory: gives illusion of larger memory. Logical (virtual) address → Physical address via page table.",
+  "Page Table: maps virtual page number → physical frame number. TLB = fast associative cache for page table.",
+  "Page Fault: referenced page NOT in physical memory → OS loads from disk. Very expensive operation.",
+  "Page Replacement algorithms: FIFO (oldest out), LRU (least recently used), OPT (optimal, impractical), LFU.",
+  "LRU is best practical page replacement. OPT is theoretical best. FIFO has Belady's anomaly.",
+  "Disk organization: concentric TRACKS, divided into SECTORS, CYLINDERS = same track across all platters.",
+  "Flynn's classification: SISD (traditional), SIMD (GPU/vector), MISD (theoretical), MIMD (multiprocessors).",
+  "Pipelining: stages run concurrently. 5-stage RISC: IF→ID→EX→MEM→WB. Speedup = n×k/(k+n-1) → k as n→∞.",
+  "Pipeline Hazards: Structural (hardware conflict), Data (RAW/WAR/WAW dependencies), Control (branch uncertainty).",
+  "Symmetric Multiprocessor: all CPUs equal (peer), same OS copy, all share memory. No master-slave.",
+  "Asymmetric Multiprocessor: master-slave, each CPU has predefined task. Cheaper but less flexible.",
+  "Tightly coupled: shared memory, synchronized communication. Loosely coupled: message passing, distributed memory.",
+  "Interconnection: Time-shared bus (simple, bottleneck), Multiport memory (high transfer, expensive), Crossbar (simultaneous, complex).",
+  "GPU: hundreds of simpler cores. Excellent for parallel processing. SIMD architecture. Used in graphics, ML, AI.",
+  "ARM: RISC-based, 32/64-bit, low power. Used in smartphones. SoC = CPU+GPU+RAM+IO on one chip.",
+  "Quantum computing: qubits can be 0 AND 1 simultaneously (superposition). Exponentially faster for specific problems.",
+  "UART: Universal Asynchronous Receiver Transmitter. Format: Start bit(0) + Data + Stop bit(1). Baud = bits/sec.",
+  "Handshaking: two-way data transfer agreement. Source sends 'data ready', destination sends 'data accepted'.",
+  "Priority Interrupt by polling (software): common branch address for all, checked in priority order. Flexible but slow.",
+  "Priority Interrupt by hardware (daisy chain): fast, each device has interrupt vector, serial connection.",
+  "Instruction is stored in IR (Instruction Register) during execution. PC = next address. AR = current address.",
+  "In basic computer, instruction code is stored in IR. (MCQ answer from docx: option C) IR",
+  "Which memory is fastest? Registers > Cache > RAM. Registers are fastest. (MCQ answer: A) Register",
+  "RISC stands for Reduced Instruction Set Computer. (NOT Risk Instruction Sequential Compilation).",
+  "Cache memory performance measured in HIT RATIO. (MCQ answer: B) Hit ratio",
+  "Subtraction in computers done by 2's complement. Add 2's complement of subtrahend to minuend.",
+  "Address in main memory = PHYSICAL address (also called real address).",
+  "8 bits = 1 Byte. 4 bits = 1 Nibble. 16/32/64 bits = 1 Word (architecture-dependent).",
+  "DMA is essential data transfer technique (MCQ answer: B DMA).",
+  "Status bit = FLAG bit. C/S/Z/V flags in PSW are called status bits or flag bits.",
+  "Decoded instruction stored in: Instruction Register (IR). Answer: D) IR.",
+  "Function of Control Unit: Decodes program instructions. Does NOT perform logic operations (that's ALU).",
+  "Which register interacts with secondary storage? MDR (Memory Data Register = DR in Mano's notation).",
+  "Instruction code = group of bits telling computer to perform a specific operation.",
+  "Circuit to store 1 bit = Flip-Flop (D flip-flop, JK flip-flop, etc.).",
+  "Common bus: reduction of hardware complexity of connections (saves wires).",
+  "In 4-register bus system: selection lines = log₂(4) = 2 selection lines.",
+  "Interrupt enable flip-flop (IEN): controls acceptance of interrupts. IEN=0 → interrupts disabled/masked."
+];
+
+// ============================================================
+// FLASHCARD DATA
+// ============================================================
+const flashcards = [
+  {q:"What happens at T0, T1, T2 in instruction fetch?", a:"T0: AR ← PC\nT1: IR ← M[AR], PC ← PC+1\nT2: Decode IR, AR←IR(0-11), I←IR(15)\nThese 3 steps happen for EVERY instruction."},
+  {q:"PC, AR, IR, DR — what does each hold?", a:"PC = address of NEXT instruction\nAR = current MEMORY ADDRESS being accessed\nIR = current INSTRUCTION being decoded\nDR = DATA read from/written to memory\nAC = ACCUMULATOR for computation"},
+  {q:"When is instruction considered Register Reference?", a:"opcode = 111 AND I = 0 (D7=1, I'=1)\nActions: CLA, CLE, CMA, CME, CIR, CIL, INC, SPA, SNA, SZA, SZE, HLT\nAll bits 0-11 select which operation."},
+  {q:"Cache Effective Time formula + example?", a:"Te = Tc + (1-h) × Tm\nNOT: h×Tc + (1-h)×Tm\n\nExample: Tc=0.4, Tm=1.2, h=0.85:\nTe = 0.4 + (0.15 × 1.2) = 0.4 + 0.18 = 0.58 ns"},
+  {q:"Stack PUSH and POP micro-operations?", a:"PUSH: SP ← SP-1, M[SP] ← DR\n       (decrement THEN store)\nPOP:  DR ← M[SP], SP ← SP+1\n       (read THEN increment)\nStack grows DOWNWARD. SP → TOP of stack."},
+  {q:"RISC vs CISC — 5 key differences?", a:"RISC: hardwired, fixed-length, load-store only, single-cycle, many registers\nCISC: microprogrammed, variable-length, memory-to-memory, multi-cycle, fewer registers\nRISC pipelines better (fixed format)."},
+  {q:"Three cache mapping techniques?", a:"Direct: 1 block → 1 cache line. Tag+Index+Offset. Simple, conflict misses.\nAssociative: any block → any line. CAM. Flexible, expensive.\nSet-Associative: block → specific SET. Compromise."},
+  {q:"DMA vs Programmed I/O vs Interrupt I/O?", a:"Programmed I/O: CPU polls (busy-wait). Very inefficient.\nInterrupt I/O: CPU works; device interrupts when ready.\nDMA: Data transferred directly memory↔device. CPU only initializes then is FREE."},
+  {q:"Daisy Chain priority interrupt — PI and PO?", a:"Device with PI=1, NO pending request → PO=1 (passes priority)\nDevice with PI=1, HAS pending request → PO=0 (stops chain, generates interrupt)\nDevice closest to CPU = HIGHEST priority."},
+  {q:"Booth's Algorithm rules?", a:"Examine Qn (current) and Q(n-1) (previous):\n00 or 11 → just Arithmetic Right Shift\n10 (1→0 transition) → SUBTRACT M, then ASHR\n01 (0→1 transition) → ADD M, then ASHR\nStart with Q(n-1) = 0"},
+  {q:"Direct vs Indirect addressing — EA calculation?", a:"Direct: EA = address field of instruction\nIndirect: EA = M[address field] (extra memory access)\nPC Relative: EA = PC + offset\nIndexed: EA = Index Register + offset\nBase: EA = BAR + offset"},
+  {q:"What triggers the Interrupt Cycle?", a:"IEN = 1 (interrupt enable)\nAND (FGI = 1 OR FGO = 1)\nFGI = 1: new input data available\nFGO = 1: output device ready for data\nInterrupt cycle saves PC to M[0], jumps to ISR."},
+  {q:"Flynn's Classification — 4 types?", a:"SISD: Single Instruction, Single Data → Traditional CPU\nSIMD: Single Instruction, Multiple Data → GPU, vector\nMISD: Multiple Instruction, Single Data → rare, fault-tolerant\nMIMD: Multiple Instruction, Multiple Data → multiprocessors"},
+  {q:"Selective complement: A=1100, B=1010 — result?", a:"Selective Complement: A ← A ⊕ B (XOR)\n1100\nXOR 1010\n= 0110\nBits in A are FLIPPED where B=1.\nBits in A are UNCHANGED where B=0."},
+  {q:"Virtual Memory — what is a Page Fault?", a:"Page Fault: Referenced page NOT in physical memory.\nOS must:\n1. Find page on disk\n2. Find free frame (or use replacement)\n3. Load page into frame\n4. Restart process\nVery expensive — thousands of cycles."},
+  {q:"What are the 5 stages of RISC pipeline?", a:"IF  = Instruction Fetch\nID  = Instruction Decode + Register Read\nEX  = Execute (ALU operation)\nMEM = Memory Access (load/store)\nWB  = Write Back (result to register)\nIdeal speedup = number of stages."},
+  {q:"Instruction format: how many opcodes possible with 3 bits?", a:"3 opcode bits → 2³ = 8 possible opcodes (000 to 111)\nIn Basic Computer:\n000=AND, 001=ADD, 010=LDA, 011=STA\n100=BUN, 101=BSA, 110=ISZ, 111=Reg-Ref or I/O"},
+  {q:"Common bus selection — which register for S2S1S0 = 100?", a:"S2=1, S1=0, S0=0 → AC (Accumulator)\nFull table:\n001=AR, 010=PC, 011=DR\n100=AC, 101=IR, 110=TR, 111=Memory"},
+  {q:"Write Through vs Write Back in cache?", a:"Write Through: Hit → write cache AND memory. Memory always current. Slower.\nWrite Back: Hit → write ONLY cache. Memory updated on eviction. Faster. Needs dirty bit.\nWrite Through good for DMA consistency."},
+  {q:"What is Memory-Mapped I/O?", a:"I/O devices and memory SHARE the same address space.\nNo separate IN/OUT instructions needed.\nSame memory reference instructions used for I/O.\nReduces available memory address range.\nMore flexible I/O handling."},
+  {q:"LDA micro-operations in Basic Computer?", a:"D2T4: DR ← M[AR]\nD2T5: AC ← DR, SC ← 0\n\nLDA loads memory content into Accumulator.\nTakes 2 execute cycles (T4 and T5)."},
+  {q:"ADD instruction micro-operations?", a:"D1T4: DR ← M[AR]\nD1T5: AC ← AC + DR, E ← Cout, SC ← 0\n\nADD adds memory content to Accumulator.\nE (carry) is set if overflow occurs.\nResult stored back in AC."},
+  {q:"2's complement of -9 in 7-bit representation?", a:"+9 in 7-bit: 0 001001\n\n-9 representations:\nSigned Magnitude: 1 001001 (flip sign bit only)\n1's Complement:    1 110110 (flip all non-sign bits)\n2's Complement:    1 110111 (1's complement + 1)"},
+  {q:"RPN evaluation: A B + C × using stack?", a:"Push A, Push B → stack: [A, B]\n'+' → pop B, pop A → push (A+B) → stack: [A+B]\nPush C → stack: [A+B, C]\n'×' → pop C, pop (A+B) → push ((A+B)×C)\nResult = (A+B)×C"},
+  {q:"PSW flags — what does each represent?", a:"C (Carry): carry out of MSB\nS (Sign): MSB of result (0=+, 1=-)\nZ (Zero): 1 if result is all zeros\nV (Overflow): XOR of last two carry bits\nV=1 means signed overflow occurred"},
+  {q:"What is ISZ instruction?", a:"ISZ = Increment and Skip if Zero\nMicro-ops:\nT4: DR ← M[AR]\nT5: DR ← DR + 1\nT6: M[AR] ← DR, if(DR=0) PC←PC+1, SC←0\nUsed for loop counters."},
+  {q:"BSA instruction — what does it do?", a:"BSA = Branch and Save return Address\nT4: M[AR] ← PC (save return address)\n    AR ← AR + 1 (point to first instruction of subroutine)\nT5: PC ← AR, SC ← 0 (jump to subroutine)\nUsed for subroutine calls in basic computer."},
+  {q:"Arithmetic Shift Right (ASHR) vs Logical Shift Right?", a:"ASHR: Fills vacated MSB with SIGN BIT. Preserves sign.\nEffect: DIVIDES signed number by 2.\n\nLogical SHR: Fills vacated MSB with 0.\nEffect: Divides UNSIGNED number by 2.\n\nASHR is for signed arithmetic."},
+  {q:"Cycle Stealing vs Burst Transfer DMA?", a:"Burst Transfer: DMA transfers ENTIRE BLOCK at once.\nCPU bus denied entire time.\nUsed for disk (can't pause mid-transfer).\n\nCycle Stealing: One word at a time.\nCPU delayed ONE cycle per word.\nCPU and DMA interleaved."},
+  {q:"What is the IOP (I/O Processor)?", a:"IOP = I/O Processor/Channel.\nKey difference from DMA: IOP can FETCH and EXECUTE its own I/O instructions.\nDMA: fixed logic. IOP: programmable.\nCPU is master, IOP is slave.\nAccesses memory by cycle stealing."},
+  {q:"Page replacement: which algorithm has Belady's anomaly?", a:"FIFO has Belady's Anomaly:\nMore frames can lead to MORE page faults (counter-intuitive).\n\nLRU and OPT do NOT have Belady's anomaly.\nOPT = optimal but impractical (needs future knowledge).\nLRU = best practical algorithm."},
+  {q:"Associative Memory vs Regular Memory?", a:"Regular (RAM): Accessed by ADDRESS.\nAssociative (CAM): Accessed by CONTENT.\n\nAssociative: All words searched SIMULTANEOUSLY.\nUsed in: Cache memory, TLB, Routers.\nFaster search, but more expensive hardware."},
+  {q:"What is the common bus system selection for IR?", a:"IR (Instruction Register) is selected when:\nS2=1, S1=0, S0=1 → binary 101 = 5\nSo S2S1S0 = 101 selects IR for output to bus.\n\nFor input to AR or PC:\nA register must have its Load signal activated."},
+  {q:"Explain Memory-Mapped vs Isolated I/O?", a:"Memory-Mapped I/O:\n• I/O devices SHARE memory address space\n• Same instructions (LOAD/STORE) for I/O\n• Reduces available memory\n• More flexible\n\nIsolated I/O:\n• Separate address space for I/O\n• Needs special IN/OUT instructions\n• More I/O addresses available"},
+  {q:"Pipelining speedup formula + example?", a:"Speedup = (n × k) / (k + n - 1)\nn = number of instructions\nk = number of pipeline stages\n\nExample: n=100, k=5:\nSpeedup = (100×5)/(5+100-1) = 500/104 ≈ 4.8\n\nAs n→∞, Speedup→k=5 (ideal)"},
+  {q:"Symmetric vs Asymmetric Multiprocessor?", a:"Symmetric: All CPUs EQUAL (peer-to-peer). Each has same OS copy. All share memory equally. Example: Encore Multimax.\n\nAsymmetric: MASTER-SLAVE. Master assigns tasks. Each CPU has predefined role. Cheaper but less flexible."},
+  {q:"What is Locality of Reference?", a:"Temporal Locality: Recently used data likely to be used AGAIN soon (e.g., loop variables).\n\nSpatial Locality: If one address accessed, NEARBY addresses likely accessed soon (e.g., arrays).\n\nCache exploits BOTH types."},
+  {q:"Control Word for R1 ← R2 + R3?", a:"SELA = R2 (010) → Bus A = R2\nSELB = R3 (011) → Bus B = R3\nSELD = R1 (001) → Destination = R1\nOPR = ADD (00010)\n\nControl Word = 010 011 001 00010"},
+  {q:"What happens during BSA instruction?", a:"BSA = Branch and Save Address:\n1. M[AR] ← PC (current PC saved at subroutine's first address)\n2. AR ← AR + 1 (point past the saved return address)\n3. PC ← AR (jump to body of subroutine)\nReturn: BUN to the first address of BSA call."},
+  {q:"Address modes for 8085 — LDAX B instruction?", a:"LDAX B = Load Accumulator Indirectly using BC pair\nMode: Register Indirect\nEA = content of BC register pair (the BC pair holds the memory address)\nA ← M[BC]\nSimilar: STAX B stores A into memory pointed by BC."}
+];
+
+// ============================================================
+// MCQ DATA (100+ questions based on your actual MCQ banks)
+// ============================================================
+const allMCQs = [
+  // UNIT 1
+  {id:1,unit:'unit1',type:'def',q:"In Mano's Basic Computer, the instruction code is stored in:",opts:["DR","AC","IR","TR"],ans:2,exp:"IR (Instruction Register) holds the current instruction being fetched and decoded. PC holds the NEXT instruction's address, not the instruction itself."},
+  {id:2,unit:'unit1',type:'numerical',q:"In a 16-bit instruction format, if 4 bits are used for opcode, maximum number of instructions possible are:",opts:["8","16","32","64"],ans:1,exp:"2^4 = 16 different opcodes possible. With 4 opcode bits, you can encode 16 different instructions."},
+  {id:3,unit:'unit1',type:'def',q:"In indirect addressing mode, the effective address is obtained from:",opts:["Operand field directly","Memory location specified in instruction","PC","AC"],ans:1,exp:"In indirect addressing, the address field of the instruction specifies a MEMORY LOCATION that CONTAINS the actual effective address. EA = M[address field]."},
+  {id:4,unit:'unit1',type:'def',q:"The I bit in instruction format of Basic Computer indicates:",opts:["Interrupt","Indirect addressing","Immediate data","I/O operation"],ans:1,exp:"Bit 15 (I bit) of the 16-bit instruction in Mano's basic computer indicates addressing mode: I=0 → Direct addressing, I=1 → Indirect addressing."},
+  {id:5,unit:'unit1',type:'def',q:"Which register holds the address of the next instruction?",opts:["IR","AR","PC","DR"],ans:2,exp:"PC (Program Counter) holds the address of the NEXT instruction to be fetched. After fetch, PC is automatically incremented (PC←PC+1)."},
+  {id:6,unit:'unit1',type:'def',q:"Which register acts as the memory buffer register?",opts:["DR","TR","AR","AC"],ans:0,exp:"DR (Data Register) acts as the memory buffer. It holds data READ from memory or data to be WRITTEN to memory. Also called MDR in some architectures."},
+  {id:7,unit:'unit1',type:'def',q:"Stack Pointer (SP) always points to:",opts:["Bottom of stack","Next free location","Top of stack","Instruction"],ans:2,exp:"SP points to the TOP of stack — the last pushed item. In Mano's stack, SP is decremented before push (points to top), and incremented after pop."},
+  {id:8,unit:'unit1',type:'numerical',q:"In a 4-register bus system, number of selection lines required is:",opts:["1","2","3","4"],ans:1,exp:"Selection lines = log₂(number of registers) = log₂(4) = 2. With 2 selection lines, 4 different registers (00, 01, 10, 11) can be selected."},
+  {id:9,unit:'unit1',type:'def',q:"The common bus system reduces:",opts:["Memory size","Number of registers","Hardware complexity of connections","Instruction size"],ans:2,exp:"Common bus reduces hardware complexity by sharing a single data path among all registers. Without bus, direct connections between n registers require n(n-1) connections."},
+  {id:10,unit:'unit1',type:'def',q:"During fetch cycle, T0 performs:",opts:["IR ← M[AR]","AR ← PC","PC ← PC+1","DR ← AC"],ans:1,exp:"T0: AR ← PC (load Program Counter value into Address Register). This is always the FIRST micro-operation of every fetch cycle."},
+  {id:11,unit:'unit1',type:'def',q:"Register Reference instructions are identified when:",opts:["Opcode=111 and I=0","Opcode=111 and I=1","Opcode=000","I=1"],ans:0,exp:"Register Reference instructions: opcode=111 (D7=1) AND I=0. If opcode=111 and I=1, those are I/O instructions instead."},
+  {id:12,unit:'unit1',type:'def',q:"The microoperation for ADD instruction execution (D1T5) is:",opts:["AC ← AC + DR","DR ← AC","AC ← DR","PC ← PC + 1"],ans:0,exp:"D1T5 (ADD execute): AC ← AC + DR, E ← Carry. First DR is loaded with M[AR] at T4, then at T5 the addition occurs."},
+  {id:13,unit:'unit1',type:'def',q:"Interrupt cycle is initiated when:",opts:["IEN=0","FGI or FGO=1 and IEN=1","AC=0","PC=0"],ans:1,exp:"Interrupt occurs when: IEN=1 (interrupts enabled) AND (FGI=1 OR FGO=1). IEN must be 1, and at least one flag must be set."},
+  {id:14,unit:'unit1',type:'def',q:"Sequence counter (SC) is used to generate:",opts:["Clock pulses","Timing signals T0, T1, T2...","Interrupt signals","Address signals"],ans:1,exp:"SC is a 4-bit counter that generates timing signals T0–T15 through a 4×16 decoder. SC is cleared (SC←0) after each instruction completes."},
+  {id:15,unit:'unit1',type:'def',q:"The fetch cycle of Basic Computer takes how many timing signals?",opts:["1","2","3","4"],ans:2,exp:"Fetch takes 3 timing signals: T0 (AR←PC), T1 (IR←M[AR], PC←PC+1), T2 (Decode). So T0, T1, T2 = 3 signals."},
+  {id:16,unit:'unit1',type:'tricky',q:"Common bus selection S2S1S0=101 selects which register?",opts:["AC","PC","IR","TR"],ans:2,exp:"S2S1S0=101 (binary 5) → IR (Instruction Register). Table: 001=AR, 010=PC, 011=DR, 100=AC, 101=IR, 110=TR, 111=Memory."},
+  {id:17,unit:'unit1',type:'def',q:"ISZ instruction performs which of the following?",opts:["Increment AC and skip if zero","Increment memory and skip if zero","Skip if AC is zero","Increment PC twice"],ans:1,exp:"ISZ = Increment and Skip if Zero. It increments the MEMORY LOCATION (not AC), and if result is 0, PC←PC+1 (skips next instruction). Used for loop counters."},
+  {id:18,unit:'unit1',type:'def',q:"BSA instruction is used for:",opts:["Branching unconditionally","Subroutine call (branch and save return address)","Bit manipulation","Stack operations"],ans:1,exp:"BSA = Branch and Save Address. Saves return address in first memory location of subroutine, then jumps. Used for subroutine calls in basic computer."},
+  {id:19,unit:'unit1',type:'tricky',q:"During fetch cycle, which sequence of micro-operations is correct?",opts:["IR←M[PC], PC←PC+1","AR←PC, IR←M[AR], PC←PC+1","DR←PC, IR←DR","PC←IR"],ans:1,exp:"Correct fetch sequence: T0: AR←PC (load address), T1: IR←M[AR] (fetch instruction) AND PC←PC+1 (advance PC simultaneously). Both T1 operations happen in one clock."},
+  {id:20,unit:'unit1',type:'numerical',q:"If PC=200 and instruction is fetched, what does PC become after fetch?",opts:["199","200","201","202"],ans:2,exp:"During T1: PC←PC+1. So PC=200 becomes PC=201 after fetch. The instruction at address 200 is fetched, and PC now points to next instruction at 201."},
+
+  // UNIT 2
+  {id:21,unit:'unit2',type:'def',q:"Zero-address instruction format is primarily associated with:",opts:["Accumulator machine","Stack machine","RISC","DMA"],ans:1,exp:"Zero-address (0-address) instructions use an implicit STACK for all operands. Stack machines like JVM (Java Virtual Machine) use this format. No address field needed."},
+  {id:22,unit:'unit2',type:'def',q:"Which instruction format minimizes memory traffic?",opts:["Three-address","Two-address","One-address","Register-to-register"],ans:3,exp:"Register-to-register (register-reference) minimizes memory traffic because all operands are in registers — no memory accesses needed during arithmetic operations."},
+  {id:23,unit:'unit2',type:'numerical',q:"In ADD R1,R2 (two-address instruction), after execution:",opts:["R1 unchanged","R2 unchanged","R1=R1+R2","R2=R1+R2"],ans:2,exp:"Two-address ADD: first address is both source AND destination. R1 ← R1 + R2. R1 is overwritten with sum. R2 is unchanged."},
+  {id:24,unit:'unit2',type:'def',q:"Which feature improves pipelining efficiency in RISC?",opts:["Variable instruction length","Few registers","Fixed instruction format","Complex addressing modes"],ans:2,exp:"Fixed instruction format in RISC allows parallel fetch+decode: opcode and register fields decoded simultaneously. Variable-length CISC instructions make decode complex and slow."},
+  {id:25,unit:'unit2',type:'def',q:"RISC architecture typically uses:",opts:["Memory-to-memory instructions","Load-store instructions","Stack-based execution","Microcoded branching"],ans:1,exp:"RISC uses LOAD-STORE architecture: ONLY load and store instructions access memory. All other operations (arithmetic, logic) use register operands only."},
+  {id:26,unit:'unit2',type:'def',q:"CISC instructions often require:",opts:["Single cycle execution","Microprogrammed control memory","No memory access","No decoding"],ans:1,exp:"CISC uses MICROPROGRAMMED control: each complex machine instruction is decoded into a sequence of microinstructions stored in control memory. This is slower than hardwired RISC control."},
+  {id:27,unit:'unit2',type:'numerical',q:"PC=400, address field=20, relative addressing. Effective Address=?",opts:["20","400","420","380"],ans:2,exp:"PC Relative: EA = PC + offset = 400 + 20 = 420. The offset in the address field is ADDED to the current PC value to get the effective address."},
+  {id:28,unit:'unit2',type:'def',q:"Auto-decrement addressing mode is typically used in:",opts:["Array traversal","Stack implementation","I/O transfer","Interrupt handling"],ans:1,exp:"Auto-decrement mode is used for STACK operations: the register (stack pointer) is decremented automatically before/after access. Autoincrement used for traversal forward."},
+  {id:29,unit:'unit2',type:'def',q:"Indexed addressing is useful for:",opts:["Subroutine calls","Array processing","Interrupt handling","Logical shift"],ans:1,exp:"Indexed addressing (EA = Index Register + offset) is perfect for ARRAY PROCESSING: the offset is the base address, and the index register steps through array elements."},
+  {id:30,unit:'unit2',type:'def',q:"Sign flag S in PSW reflects:",opts:["Carry out","MSB of result","LSB of result","Interrupt"],ans:1,exp:"Sign flag S = MSB (most significant bit) of the ALU output. S=0 → positive result. S=1 → negative result. Directly reflects the sign bit of the result."},
+  {id:31,unit:'unit2',type:'def',q:"Signed addition overflow occurs when:",opts:["Adding two positive numbers gives negative result","Carry generated","Zero result","Interrupt occurs"],ans:0,exp:"Overflow in signed addition occurs when two positives give a negative result, or two negatives give a positive. Overflow V = XOR of the last two carry bits."},
+  {id:32,unit:'unit2',type:'def',q:"Interrupt enable flip-flop = 0 means:",opts:["Interrupts accepted","Interrupts masked (disabled)","DMA active","ALU disabled"],ans:1,exp:"IEN=0 means interrupts are MASKED/DISABLED. The computer will not accept interrupt requests. IEN=1 enables interrupts. IEN is cleared during interrupt service to prevent nesting."},
+  {id:33,unit:'unit2',type:'def',q:"Types of interrupts — 'Divide by zero' is which type?",opts:["External interrupt","Internal interrupt (trap)","Software interrupt","Priority interrupt"],ans:1,exp:"Divide by zero is an INTERNAL INTERRUPT (trap): caused by the currently running program. Other traps: stack overflow, opcode violation, protection violation."},
+  {id:34,unit:'unit2',type:'tricky',q:"Which architecture eliminates memory operands in arithmetic instructions?",opts:["CISC","Stack","RISC","Accumulator"],ans:2,exp:"RISC eliminates memory operands in arithmetic: all arithmetic operations work ONLY on registers. Memory accessed ONLY by dedicated LOAD and STORE instructions."},
+  {id:35,unit:'unit2',type:'numerical',q:"Stack grows downward. SP=500. After PUSH, PUSH, POP. Final SP=?",opts:["498","499","500","501"],ans:1,exp:"Start: SP=500. PUSH: SP=499. PUSH: SP=498. POP: SP=499. Final SP=499. PUSH decrements SP, POP increments SP."},
+  {id:36,unit:'unit2',type:'def',q:"Processor Status Word (PSW) typically contains:",opts:["Instruction address","Data registers","Status flags (C,S,Z,V)","Stack data"],ans:2,exp:"PSW (Processor Status Word) contains STATUS FLAGS: C=Carry, S=Sign, Z=Zero, V=Overflow. Also called flag register or condition code register."},
+  {id:37,unit:'unit2',type:'tricky',q:"In basic computer, how many clock cycles for memory-reference instruction with indirect addressing?",opts:["3","4","5","6"],ans:3,exp:"T0(fetch),T1(fetch),T2(decode),T3(indirect EA), T4(execute), T5(execute finish) = 6 cycles T0–T5. 3 for fetch+decode, 1 for indirect, 2 for execute."},
+  {id:38,unit:'unit2',type:'def',q:"Main disadvantage of three-address instruction is:",opts:["More memory required for instruction storage","More instructions required","Slower execution","No ALU"],ans:0,exp:"3-address instructions have LONG instruction words (need bits for 3 addresses). This wastes instruction memory. But programs are SHORT (fewer instructions needed)."},
+  {id:39,unit:'unit2',type:'numerical',q:"Address field=300, M[300]=900, indirect addressing. Effective Address=?",opts:["300","900","M[900]","PC"],ans:1,exp:"Indirect: EA = M[address field] = M[300] = 900. The address field points to a memory location which CONTAINS the effective address."},
+  {id:40,unit:'unit2',type:'numerical',q:"Index register IX=1000, address field=50, indexed addressing. EA=?",opts:["950","1000","1050","50"],ans:2,exp:"Indexed: EA = IX + address field = 1000 + 50 = 1050. The index register is ADDED to the address field to get the effective address."},
+
+  // UNIT 3
+  {id:41,unit:'unit3',type:'def',q:"In memory-mapped I/O:",opts:["I/O devices have separate address space","Memory and I/O have associated address space","Memory specifically set aside for I/O","I/O devices and memory share the same address space"],ans:3,exp:"Memory-Mapped I/O: I/O devices and memory SHARE the SAME address space. No distinction between memory read/write and I/O read/write. Same instructions used for both."},
+  {id:42,unit:'unit3',type:'def',q:"The advantage of I/O mapped (isolated) devices over memory-mapped is:",opts:["Fewer address lines needed for I/O devices","Faster data transfer","Bigger buffer space","No advantage"],ans:0,exp:"In isolated I/O, I/O devices use a SEPARATE smaller address space → FEWER address lines needed. Example: 8-bit I/O address vs 16/32-bit memory address in Intel x86."},
+  {id:43,unit:'unit3',type:'def',q:"The method of accessing I/O devices by repeatedly checking status flags is:",opts:["Memory-mapped I/O","Interrupt-driven","Programmed I/O (polling)","DMA"],ans:2,exp:"Programmed I/O (polling): CPU REPEATEDLY checks the device status flag in a busy-wait loop until device is ready. Wastes CPU time but is simple to implement."},
+  {id:44,unit:'unit3',type:'def',q:"Which I/O transfer method offers highest speed?",opts:["Interrupts","Memory mapping","Programmed I/O","DMA"],ans:3,exp:"DMA (Direct Memory Access) offers highest speed for bulk transfers: data moves DIRECTLY between memory and device without CPU involvement. CPU is free for other tasks."},
+  {id:45,unit:'unit3',type:'def',q:"The method synchronizing processor with I/O device where device sends signal when ready:",opts:["Exceptions","Signal handling","Interrupts","DMA"],ans:2,exp:"Interrupts: device sends hardware signal to CPU when it's READY for data transfer. CPU is free until then. More efficient than polling. CPU serves interrupt and returns."},
+  {id:46,unit:'unit3',type:'def',q:"The process where processor constantly checks status flags is called:",opts:["Polling","Inspection","Reviewing","Echoing"],ans:0,exp:"Polling: CPU repeatedly reads device status register checking if device is ready. Also called busy-waiting or programmed I/O. Efficient only for very fast devices."},
+  {id:47,unit:'unit3',type:'def',q:"Interrupt-request line is part of the:",opts:["Data line","Control line","Address line","None"],ans:1,exp:"Interrupt request line is part of the CONTROL BUS. It signals the CPU that a device needs attention. Separate from data bus (for data) and address bus (for addresses)."},
+  {id:48,unit:'unit3',type:'def',q:"Return address from interrupt-service routine is stored on the:",opts:["System queue","Processor register","Processor stack","Memory"],ans:2,exp:"Return address saved on PROCESSOR STACK during interrupt. When ISR completes, address is popped from stack and loaded into PC to continue original program."},
+  {id:49,unit:'unit3',type:'def',q:"Time between receiving an interrupt and its service is called:",opts:["Interrupt delay","Interrupt latency","Cycle time","Switching time"],ans:1,exp:"Interrupt LATENCY: time from when interrupt is received to when the interrupt service routine begins executing. Lower latency = better real-time response."},
+  {id:50,unit:'unit3',type:'def',q:"In Daisy Chain priority, if device has NO pending interrupt: PI and PO =?",opts:["PI=0, PO=0","PI=0, PO=1","PI=1, PO=0","PI=1, PO=1"],ans:3,exp:"If device receives PI=1 and has NO pending interrupt: PO=1 (passes priority to next device). If it HAS pending: PO=0 (stops chain, generates interrupt vector address)."},
+  {id:51,unit:'unit3',type:'def',q:"DMA controller initialization requires CPU to provide:",opts:["Only memory address","Only word count","Memory address, word count, and transfer mode","Only control bits"],ans:2,exp:"CPU initializes DMA with: (1) Starting memory address, (2) Word count (block size), (3) Control bits (read/write direction), (4) Start signal. Then CPU is free."},
+  {id:52,unit:'unit3',type:'def',q:"Cycle stealing in DMA means:",opts:["DMA transfers entire block at once","DMA transfers one word at a time stealing CPU bus cycles","CPU executes DMA code","Memory stolen from CPU"],ans:1,exp:"Cycle Stealing: DMA controller transfers ONE DATA WORD at a time. For each word, it 'steals' one memory cycle from the CPU. CPU is delayed briefly but not blocked."},
+  {id:53,unit:'unit3',type:'tricky',q:"What is the key difference between DMA and IOP?",opts:["DMA is faster","IOP has no memory access","IOP can fetch and execute its own I/O instructions","DMA needs no initialization"],ans:2,exp:"IOP (I/O Processor) can FETCH and EXECUTE its own channel programs (I/O instructions). DMA is fixed-logic hardware. IOP is a programmable processor dedicated to I/O."},
+  {id:54,unit:'unit3',type:'def',q:"UART stands for:",opts:["Universal Asynchronous Sender Receiver","Universal Asynchronous Receiver Transmitter","Universal Synchronous Receiver Transmitter","None of these"],ans:1,exp:"UART = Universal Asynchronous Receiver Transmitter. Converts parallel data to serial for transmission and vice versa. Uses start bit (0) + data + stop bit (1) format."},
+  {id:55,unit:'unit3',type:'def',q:"Asynchronous data transfer between two units requires:",opts:["Common clock","Control signals for synchronization","Fixed baud rate","Shared memory"],ans:1,exp:"Asynchronous transfer: each unit has its own independent clock. Control signals (strobe or handshaking) are required to synchronize data transfer between units."},
+  {id:56,unit:'unit3',type:'def',q:"Priority interrupt by software (polling) disadvantage:",opts:["High hardware cost","Flexible but SLOW","Cannot identify priority","Random priority"],ans:1,exp:"Software polling is VERY SLOW: CPU must test each device sequentially. If many devices, polling time may exceed available service time. Hardware priority (daisy chain) is faster."},
+  {id:57,unit:'unit3',type:'def',q:"Burst transfer DMA is needed for:",opts:["Keyboard input","Printer output","Magnetic disk (cannot pause during transfer)","Simple display"],ans:2,exp:"Burst Transfer used for magnetic disk: data transmission cannot be stopped or slowed mid-transfer. Entire block must complete. CPU bus denied for entire burst duration."},
+  {id:58,unit:'unit3',type:'def',q:"Which flag enables/disables interrupts in Basic Computer?",opts:["FGI","FGO","IEN","R"],ans:2,exp:"IEN (Interrupt Enable flip-flop): IEN=1 → interrupts accepted. IEN=0 → interrupts disabled (masked). Set by ION instruction, cleared by IOF instruction and during interrupt cycle."},
+  {id:59,unit:'unit3',type:'def',q:"Status command in I/O interface is used to:",opts:["Activate peripheral","Test various status conditions of interface","Transfer data","Issue a control signal"],ans:1,exp:"Status Command: tests the state of interface and peripheral (ready/busy, error flags, etc.). Helps CPU know if device is ready for data transfer before initiating transfer."},
+  {id:60,unit:'unit3',type:'def',q:"In I/O mapped (isolated) I/O: control is done by:",opts:["Memory LOAD/STORE","Special IN/OUT instructions","DMA controller only","CPU halt"],ans:1,exp:"Isolated I/O uses DISTINCT IN/OUT instructions to access I/O devices. Separate from memory instructions. I/O has its own address space, controlled via special I/O operations."},
+
+  // UNIT 4
+  {id:61,unit:'unit4',type:'def',q:"RTL R2←R1 means:",opts:["R1 is cleared after transfer","R2 content goes to R1","R1 content copied to R2 (R1 unchanged)","Both registers cleared"],ans:2,exp:"R2←R1: R1 content COPIED to R2. R1 is UNCHANGED (non-destructive read). R2 is REPLACED with R1's value (destructive write). Non-destructive on source."},
+  {id:62,unit:'unit4',type:'def',q:"What is the effect of ashr (Arithmetic Shift Right)?",opts:["Subtraction by 2","Multiplication by 2","Division by 2","Addition by 2"],ans:2,exp:"ASHR: Shifts right, fills MSB with sign bit. Effect = DIVIDES the signed number by 2. Example: 1000(-8) ASHR = 1100(-4). Preserves sign."},
+  {id:63,unit:'unit4',type:'numerical',q:"Register A=1100, B=1010. Selective Complement (A←A⊕B) result:",opts:["1001","0111","1000","0110"],ans:3,exp:"Selective Complement = XOR. A=1100 XOR B=1010: 1 XOR 1=0, 1 XOR 0=1, 0 XOR 1=1, 0 XOR 0=0 = 0110. Bits in A flipped where B=1."},
+  {id:64,unit:'unit4',type:'def',q:"In Binary Adder-Subtractor, Mode M=1 gives:",opts:["A+B","A-B (subtraction)","A AND B","A XOR B"],ans:1,exp:"Mode M=1: XOR gates complement B (B'), and carry-in=1, so circuit computes A+B'+1 = A-B (2's complement subtraction). M=0: normal addition A+B."},
+  {id:65,unit:'unit4',type:'def',q:"Selective Set operation A←A∨B sets bits in A where:",opts:["B=0","B=1","A=0","A=1"],ans:1,exp:"Selective Set: A←A OR B. Where B=1, those positions in A are SET to 1 (regardless of A's previous value). Where B=0, A's bits are unchanged."},
+  {id:66,unit:'unit4',type:'def',q:"Mask operation A←A∧B clears bits in A where:",opts:["B=1","B=0","A=1","A=0"],ans:1,exp:"Mask operation: A←A AND B. Where B=0, those bits in A are CLEARED to 0. Where B=1, A's bits are unchanged. Used to isolate specific bit fields."},
+  {id:67,unit:'unit4',type:'def',q:"SIPO shift register means:",opts:["Slow Input Parallel Output","Serial Input Parallel Output","Serial Input Processed Output","Shift In Parallel Out"],ans:1,exp:"SIPO = Serial Input, Parallel Output. Data enters ONE BIT AT A TIME serially, but all bits are available simultaneously at output. Converts serial to parallel data."},
+  {id:68,unit:'unit4',type:'def',q:"Parallel load register: all bits loaded:",opts:["One at a time using serial clock","Simultaneously on single clock pulse","In pairs","From memory only"],ans:1,exp:"Parallel load: ALL bits of the register are loaded SIMULTANEOUSLY in response to a single common clock edge. More efficient than serial load (requires multiple clock pulses)."},
+  {id:69,unit:'unit4',type:'def',q:"In Booth's Algorithm, what happens when Qn=1 and Q(n-1)=0?",opts:["Shift only","Add multiplicand then shift","Subtract multiplicand then shift","Clear AC"],ans:2,exp:"Qn=1, Q(n-1)=0 (transition from 0→1 going right): SUBTRACT multiplicand from AC, then arithmetic right shift. This marks the beginning of a string of 1s."},
+  {id:70,unit:'unit4',type:'numerical',q:"Signed magnitude representation of -9 in 7-bit binary:",opts:["0 001001","1 001001","1 110110","1 110111"],ans:1,exp:"Signed magnitude: sign bit=1 (negative), magnitude=001001 (binary 9). So -9 = 1 001001. Simple to understand but complex for arithmetic circuits."},
+  {id:71,unit:'unit4',type:'def',q:"2's complement of -9 in 7-bit representation is:",opts:["1 001001","1 110110","1 110111","0 110111"],ans:2,exp:"Step 1: +9 = 0 001001. Step 2: 1's complement = 1 110110 (flip all bits). Step 3: 2's complement = 1 110110 + 1 = 1 110111."},
+  {id:72,unit:'unit4',type:'def',q:"HDL Design Flow sequence is:",opts:["Synthesis→Design→Simulation→Verification","Design→Simulation→Synthesis→Verification","Design→Synthesis→Simulation→Verification","Verification→Design→Synthesis→Simulation"],ans:1,exp:"HDL Design Flow: Design (write code) → Simulation (test with simulator) → Synthesis (convert to gates) → Verification (confirm correct output)."},
+  {id:73,unit:'unit4',type:'def',q:"Circular shift (CIR/CIL) is different from logical shift because:",opts:["It uses carry flag","Shifted-out bit enters the vacated end (no bits lost)","It only works on signed numbers","It's slower"],ans:1,exp:"Circular shift (rotate): the bit shifted OUT at one end re-enters at the other end. No information is lost. CIR: right end bit → carry E, carry E → left end."},
+  {id:74,unit:'unit4',type:'def',q:"RTL conditional transfer 'P: R2←R1' means:",opts:["P is ignored","If P=1, transfer R1 to R2","If P=0, transfer","Transfer only once"],ans:1,exp:"Conditional transfer: the colon separates the control function from the operation. 'P: R2←R1' means IF the control signal P=1, THEN perform R2←R1. Otherwise no transfer."},
+  {id:75,unit:'unit4',type:'def',q:"Binary subtraction A-B using 2's complement:",opts:["A + B","A + 1's complement of B","A + 2's complement of B","A - 1's complement of B"],ans:2,exp:"2's complement subtraction: A - B = A + (2's complement of B) = A + (B' + 1). Hardware: complement B and set carry-in=1. Discard carry out of MSB."},
+  {id:76,unit:'unit4',type:'def',q:"The four types of micro-operations in a computer system are:",opts:["Fetch, Decode, Execute, Store","Register Transfer, Arithmetic, Logic, Shift","ADD, SUB, MUL, DIV","Input, Output, Compute, Store"],ans:1,exp:"4 types: (1) Register Transfer (copy), (2) Arithmetic (add, sub, inc, dec), (3) Logic (AND, OR, XOR, NOT), (4) Shift (logical, circular, arithmetic)."},
+  {id:77,unit:'unit4',type:'tricky',q:"In Booth's Algorithm, starting condition is:",opts:["Q(n-1)=1","Q(n-1)=0","AC=1","All registers = multiplier"],ans:1,exp:"Booth's Algorithm ALWAYS starts with Q(n-1)=0 (the fictitious bit to the right of LSB of multiplier). AC=0 initially. Q = multiplier value."},
+  {id:78,unit:'unit4',type:'def',q:"Arithmetic Shift Left (ASHL) effect on a number:",opts:["Divides by 2","Multiplies by 2","Adds 2","Subtracts 2"],ans:1,exp:"ASHL: multiplies signed number by 2. Shifts all bits left, fills LSB with 0. If MSB changes (sign bit flipped), overflow occurs (V=1). ASHR divides by 2."},
+  {id:79,unit:'unit4',type:'def',q:"Selective Clear A←A∧B' clears bits in A where:",opts:["A=0","B=0","B=1","A=B"],ans:2,exp:"Selective Clear: A←A AND (NOT B). Where B=1 (B'=0), A AND 0 = 0 → those bits CLEARED. Where B=0 (B'=1), A AND 1 = A → bits UNCHANGED."},
+  {id:80,unit:'unit4',type:'def',q:"Which shift register type is used to multiplex multiple input lines into single serial stream?",opts:["SISO","SIPO","PISO","PIPO"],ans:2,exp:"PISO (Parallel Input, Serial Output): takes multiple parallel inputs and converts to serial output. Used to multiplex many input lines into a single serial data stream for transmission."},
+
+  // UNIT 5
+  {id:81,unit:'unit5',type:'def',q:"Which memory is fastest in the memory hierarchy?",opts:["Cache memory","RAM","Registers","Hard disk"],ans:2,exp:"Registers are FASTEST (1 cycle access, on-chip). Cache is second, then RAM, then secondary storage (disk). Speed inversely related to size and cost."},
+  {id:82,unit:'unit5',type:'def',q:"Cache memory performance is measured in terms of:",opts:["Chat ratio","Hit ratio","Copy ratio","Data ratio"],ans:1,exp:"Cache performance = HIT RATIO = fraction of memory accesses satisfied by cache. Higher hit ratio → better cache performance → lower effective access time."},
+  {id:83,unit:'unit5',type:'numerical',q:"Tc=0.4ns, Tm=1.2ns, h=0.85. Effective access time Te=?",opts:["0.4ns","0.58ns","1.2ns","0.85ns"],ans:1,exp:"Te = Tc + (1-h)×Tm = 0.4 + (1-0.85)×1.2 = 0.4 + 0.15×1.2 = 0.4 + 0.18 = 0.58ns."},
+  {id:84,unit:'unit5',type:'def',q:"Direct mapping cache: each memory block maps to:",opts:["Any cache line","Only one specific cache line","A specific SET","The most recently used line"],ans:1,exp:"Direct Mapping: each memory block maps to EXACTLY ONE cache line. Line = block_number mod (total_cache_lines). Simple but causes CONFLICT MISSES."},
+  {id:85,unit:'unit5',type:'def',q:"Associative mapping (CAM) is accessed by:",opts:["Address only","Content of the data","Both address and content","Random access"],ans:1,exp:"Associative/Content Addressable Memory (CAM): accessed by CONTENT. An argument register is compared with ALL stored tag fields SIMULTANEOUSLY (parallel search). No address needed."},
+  {id:86,unit:'unit5',type:'def',q:"Write Through cache policy means:",opts:["Write to cache only on hit","Write to both cache and memory on hit","Write to memory only","Write to backup storage"],ans:1,exp:"Write Through: on EVERY WRITE HIT, data is written to BOTH cache AND memory simultaneously. Memory is always current. Slower due to memory write overhead."},
+  {id:87,unit:'unit5',type:'def',q:"Write Back cache policy: when is memory updated?",opts:["On every write","On read miss","Only when the block is evicted from cache","Never"],ans:2,exp:"Write Back: memory updated ONLY when the modified cache block is EVICTED (replaced). Uses dirty bit to track if block was written. Memory may be stale until eviction."},
+  {id:88,unit:'unit5',type:'def',q:"Virtual memory gives programmers illusion of:",opts:["Faster CPU","Larger memory than physically available","Extra registers","Permanent storage"],ans:1,exp:"Virtual Memory: program uses logical (virtual) addresses that can exceed physical RAM. OS/hardware maps virtual→physical. Disk used as extension of RAM."},
+  {id:89,unit:'unit5',type:'def',q:"Page Fault occurs when:",opts:["Cache miss occurs","Referenced page is NOT in physical memory","Memory is full","CPU overheats"],ans:1,exp:"Page Fault: CPU references a virtual page NOT currently in physical RAM. OS must locate page on disk, load into a free frame (evicting if necessary), then restart access."},
+  {id:90,unit:'unit5',type:'def',q:"Which page replacement algorithm has Belady's Anomaly?",opts:["LRU","OPT (Optimal)","FIFO","LFU"],ans:2,exp:"FIFO has Belady's Anomaly: INCREASING the number of frames can INCREASE page faults. Counter-intuitive. LRU and OPT are not susceptible to Belady's anomaly."},
+  {id:91,unit:'unit5',type:'def',q:"LRU page replacement replaces:",opts:["Oldest page","Least recently used page","Least frequently used page","Largest page"],ans:1,exp:"LRU (Least Recently Used): replaces the page that was NOT USED for the LONGEST TIME in the past. Exploits temporal locality. Best practical algorithm. No Belady's anomaly."},
+  {id:92,unit:'unit5',type:'def',q:"Optimal (OPT) page replacement algorithm is:",opts:["Easy to implement","Impractical but gives best performance","Same as FIFO","Based on frequency"],ans:1,exp:"OPT: replaces page not needed for the LONGEST FUTURE TIME. Gives THEORETICALLY BEST performance (minimum page faults). IMPRACTICAL because future is unknown. Used as benchmark."},
+  {id:93,unit:'unit5',type:'def',q:"Set-Associative mapping is a compromise between:",opts:["SRAM and DRAM","Direct and Associative mapping","Write-through and Write-back","Cache and RAM"],ans:1,exp:"Set-Associative: combines Direct (simple, cheap) and Associative (flexible, expensive). Memory block maps to one specific SET, but within that set any line can be used."},
+  {id:94,unit:'unit5',type:'def',q:"Locality of Reference in cache means:",opts:["All memory accessed equally","Memory references tend to cluster in localized areas","Cache is local to CPU","Memory randomly accessed"],ans:1,exp:"Locality of Reference: memory accesses tend to be localized. Temporal: reuse same data. Spatial: access nearby data. Cache exploits this property for efficiency."},
+  {id:95,unit:'unit5',type:'tricky',q:"Which of the following is used in TLB (Translation Lookaside Buffer)?",opts:["Direct mapping","FIFO replacement","Associative memory (CAM)","Write-back policy"],ans:2,exp:"TLB uses ASSOCIATIVE MEMORY (CAM): all TLB entries searched SIMULTANEOUSLY to find the matching virtual page number → physical frame. Fast virtual-to-physical translation."},
+  {id:96,unit:'unit5',type:'def',q:"Direct mapping address is divided into:",opts:["Tag + Offset only","Tag + Index + Offset","Block + Page + Offset","Tag + Set + Block"],ans:1,exp:"Direct Mapping address: Tag (identifies which block) + Index/Line (selects cache line) + Offset (byte within block). Index = block_number mod cache_size."},
+  {id:97,unit:'unit5',type:'def',q:"Auxiliary (secondary) memory characteristics:",opts:["Fast, volatile, directly CPU accessible","Slow, non-volatile, NOT directly CPU accessible","Fast, non-volatile","Slow, volatile"],ans:1,exp:"Auxiliary/secondary memory: SLOW, NON-VOLATILE (retains data without power), NOT directly CPU accessible (must load into RAM first). Massive capacity (terabytes)."},
+  {id:98,unit:'unit5',type:'def',q:"Why is direct mapping simpler than associative?",opts:["Uses CAM for parallel search","Uses simple RAM lookup (no parallel comparison)","Fewer bits needed","Faster access always"],ans:1,exp:"Direct mapping: uses simple RAM indexed by the line number. NO parallel comparison needed. Just read the tag at that index and compare. Associative mapping needs CAM for parallel search."},
+  {id:99,unit:'unit5',type:'def',q:"Temporal locality in cache means:",opts:["Nearby addresses accessed together","Recently used data likely used again soon","Cache is fast","Memory is large"],ans:1,exp:"Temporal Locality: if data at address X is accessed, it's likely to be accessed AGAIN SOON (e.g., loop counter). Cache keeps recently used data to exploit this property."},
+  {id:100,unit:'unit5',type:'def',q:"Conflict miss in direct mapping occurs when:",opts:["Cache is full","Two memory blocks compete for same cache line","Cache tag doesn't match","Page fault"],ans:1,exp:"Conflict Miss: two memory blocks that map to the SAME cache line cannot both be in cache simultaneously. Even if other cache lines are empty. Worst case of direct mapping."},
+
+  // UNIT 6
+  {id:101,unit:'unit6',type:'def',q:"Flynn's SIMD stands for:",opts:["Single Instruction Multiple Data","Single Instruction Multiple Devices","System Instruction Multiple Data","Single Input Multiple Devices"],ans:0,exp:"SIMD = Single Instruction, Multiple Data. One instruction applied to multiple data elements simultaneously. Example: GPU cores, vector processors, multimedia (SSE, AVX in Intel CPUs)."},
+  {id:102,unit:'unit6',type:'def',q:"Pipelining speedup formula (n instructions, k stages):",opts:["n+k","n×k/(k+n-1)","k/n","n×k"],ans:1,exp:"Speedup = n×k/(k+n-1). As n→∞, Speedup→k. Example: n=100, k=5: Speedup = 500/104 ≈ 4.8. Never quite reaches k because of pipeline fill/drain overhead."},
+  {id:103,unit:'unit6',type:'def',q:"5-stage RISC pipeline stages in order:",opts:["IF,ID,EX,MEM,WB","ID,IF,EX,WB,MEM","IF,EX,ID,MEM,WB","MEM,IF,ID,EX,WB"],ans:0,exp:"5-stage RISC pipeline: IF(Instruction Fetch) → ID(Instruction Decode) → EX(Execute) → MEM(Memory Access) → WB(Write Back). Must be in this order."},
+  {id:104,unit:'unit6',type:'def',q:"Symmetric Multiprocessor (SMP) characteristic:",opts:["Master-slave relationship","All CPUs are equal (peer-to-peer), share memory","Each CPU has predefined task","One CPU handles all I/O"],ans:1,exp:"SMP: ALL CPUs are EQUAL (peer-to-peer). Each runs same OS copy. All share common memory. No master-slave. Load balanced automatically. Example: modern multi-core systems."},
+  {id:105,unit:'unit6',type:'def',q:"Traditional single-processor computer falls under Flynn's:",opts:["SIMD","MIMD","SISD","MISD"],ans:2,exp:"SISD = Single Instruction, Single Data. Traditional von Neumann computer: one instruction stream, one data stream. Sequential execution. May have pipelining but still SISD classification."},
+  {id:106,unit:'unit6',type:'def',q:"Crossbar switch interconnection allows:",opts:["Only one transfer at a time","Simultaneous transfers from all memory modules","Serial transfers only","Single bus access"],ans:1,exp:"Crossbar Switch: crosspoints at intersections of processor and memory paths. Multiple processors can access different memory modules SIMULTANEOUSLY. Most flexible but most hardware."},
+  {id:107,unit:'unit6',type:'def',q:"Tightly coupled multiprocessor systems communicate via:",opts:["Message passing","Shared memory","Ethernet","Optical fiber"],ans:1,exp:"Tightly Coupled: processors communicate through SHARED MEMORY. Highly synchronized (shared clock/bus). Fast communication, low overhead. Contrast: loosely coupled uses message passing."},
+  {id:108,unit:'unit6',type:'def',q:"GPU differs from CPU because:",opts:["GPU has fewer but more powerful cores","GPU has hundreds of simpler cores for parallel processing","GPU is slower for all tasks","GPU cannot do arithmetic"],ans:1,exp:"GPU has HUNDREDS of simpler cores optimized for parallel operations. CPU has fewer but more complex cores optimized for sequential tasks. GPU excellent for graphics, ML, data-parallel tasks."},
+  {id:109,unit:'unit6',type:'def',q:"ARM processor is based on which architecture?",opts:["CISC","VLIW","RISC","Stack-based"],ans:2,exp:"ARM = Advanced RISC Machines. Based on RISC architecture: reduced instruction set, fixed-length instructions, load-store, hardwired control. Low power, used in smartphones/tablets."},
+  {id:110,unit:'unit6',type:'def',q:"Data hazard in pipeline occurs when:",opts:["Two instructions need same hardware resource","An instruction needs result of a previous instruction still in pipeline","Branch changes program flow","Cache miss occurs"],ans:1,exp:"Data Hazard: instruction N needs a result that hasn't been written back yet by instruction N-1 still in the pipeline. Types: RAW (Read After Write, most common), WAR, WAW."}
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let currentPage='dashboard',timerRunning=false,timerSeconds=0,timerInterval,
+    mcqScore=0,mcqTotal=0,currentFilter='all',currentMCQs=[...allMCQs],
+    mockQuestions=[],mockAnswers={},mockCurrent=0,mockTimerInterval,mockSeconds=1800,
+    currentCard=0,cardOrder=Array.from({length:flashcards.length},(_,i)=>i);
+
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');p.style.display='none'});
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById('page-'+name);
+  if(pg){pg.classList.add('active');pg.style.display='block';}
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+name+"'"))n.classList.add('active');
+  });
+  currentPage=name;
+  if(name==='top100'&&!document.getElementById('top100Container').innerHTML)initTop100();
+  if(name==='flashcards')initFlashcards();
+  if(name==='mcq')initMCQ();
+  window.scrollTo(0,0);
+}
+function toggleSidebar(){
+  const sb=document.getElementById('sidebar'),m=document.getElementById('mainContent');
+  if(window.innerWidth<=768)sb.classList.toggle('mobile-open');
+  else{sb.classList.toggle('hidden');m.classList.toggle('expanded');}
+}
+function doSearch(val){
+  if(!val||val.length<2){if(currentPage==='search')showPage('dashboard');return;}
+  const v=val.toLowerCase();
+  const idx=[
+    {title:'Instruction Cycle Fetch Timing',content:'T0 T1 T2 AR PC IR fetch decode timing signals',type:'Unit 1',page:'unit1'},
+    {title:'Cache Hit Ratio Formula',content:'Te Tc Tm hit ratio effective access time cache performance',type:'Unit 5',page:'unit5'},
+    {title:'DMA Direct Memory Access',content:'DMA burst transfer cycle stealing word count address register',type:'Unit 3',page:'unit3'},
+    {title:'Booth Algorithm Multiplication',content:'Booth signed 2s complement multiplication QN Q(n-1) ASHR',type:'Unit 4',page:'unit4'},
+    {title:'Addressing Modes EA',content:'Direct indirect indexed PC relative base register effective address',type:'Unit 2',page:'unit2'},
+    {title:'RISC vs CISC',content:'RISC CISC fixed length hardwired microprogrammed load store',type:'Unit 2',page:'unit2'},
+    {title:'Daisy Chain Priority',content:'Daisy chain PI PO priority interrupt hardware serial connection',type:'Unit 3',page:'unit3'},
+    {title:'Stack Push Pop',content:'Stack SP push pop LIFO grows downward SP decrements',type:'Unit 2',page:'unit2'},
+    {title:'Cache Mapping Techniques',content:'Direct associative set-associative mapping CAM tag index offset',type:'Unit 5',page:'unit5'},
+    {title:'Virtual Memory Page Fault',content:'Virtual memory page fault page table TLB replacement LRU FIFO',type:'Unit 5',page:'unit5'},
+    {title:'Pipelining Speedup',content:'Pipeline stages IF ID EX MEM WB speedup formula hazards',type:'Unit 6',page:'unit6'},
+    {title:"Flynn's Classification",content:"SISD SIMD MISD MIMD Flynn single multiple instruction data streams",type:'Unit 6',page:'unit6'},
+    ...allMCQs.slice(0,15).map(q=>({title:'MCQ: '+q.q.substring(0,45)+'...',content:q.q+' '+q.exp,type:'MCQ',page:'mcq'}))
+  ];
+  const res=idx.filter(i=>i.title.toLowerCase().includes(v)||i.content.toLowerCase().includes(v));
+  document.getElementById('searchResults').innerHTML=res.length===0?'<div style="color:var(--text3);text-align:center;padding:40px">No results. Try: fetch, cache, DMA, RISC, booth, addressing...</div>':
+    res.slice(0,12).map(r=>`<div class="search-result" onclick="showPage('${r.page}')"><div class="sr-type">${r.type}</div><div class="sr-title">${r.title}</div><div class="sr-context">${r.content.substring(0,100)}...</div></div>`).join('');
+  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');p.style.display='none';});
+  const sp=document.getElementById('page-search');sp.style.display='block';sp.classList.add('active');
+}
+function toggleTimer(){
+  if(timerRunning){clearInterval(timerInterval);timerRunning=false;document.getElementById('timerPill').textContent='⏸ Paused';}
+  else{timerRunning=true;timerInterval=setInterval(()=>{timerSeconds++;const m=String(Math.floor(timerSeconds/60)).padStart(2,'0'),s=String(timerSeconds%60).padStart(2,'0');document.getElementById('timerPill').textContent=`⏱ ${m}:${s}`;},1000);}
+}
+function initTop100(){document.getElementById('top100Container').innerHTML=top100Data.map((item,i)=>`<div class="top100-item"><div class="top100-num">${String(i+1).padStart(2,'0')}</div><div>${item}</div></div>`).join('');}
+function initFlashcards(){renderCard();updateCardGrid();}
+function renderCard(){const c=flashcards[cardOrder[currentCard]];document.getElementById('fcFront').textContent=c.q;document.getElementById('fcBack').textContent=c.a;document.getElementById('fcCounter').textContent=`${currentCard+1} / ${flashcards.length}`;document.getElementById('flashcard').classList.remove('flipped');}
+function flipCard(){document.getElementById('flashcard').classList.toggle('flipped');}
+function nextCard(){if(currentCard<flashcards.length-1){currentCard++;renderCard();updateCardGrid();}}
+function prevCard(){if(currentCard>0){currentCard--;renderCard();updateCardGrid();}}
+function shuffleCards(){cardOrder=cardOrder.sort(()=>Math.random()-.5);currentCard=0;renderCard();updateCardGrid();}
+function goToCard(i){currentCard=i;renderCard();updateCardGrid();}
+function updateCardGrid(){document.getElementById('cardGrid').innerHTML=cardOrder.map((_,i)=>`<div class="q-bubble ${i===currentCard?'answered':''}" onclick="goToCard(${i})">${i+1}</div>`).join('');}
+function initMCQ(){renderMCQs(allMCQs);}
+function renderMCQs(mcqs){
+  currentMCQs=mcqs;
+  document.getElementById('mcqContainer').innerHTML=mcqs.map((q,qi)=>`
+    <div class="mcq-card" id="mc-${q.id}">
+      <div class="mcq-header"><div class="mcq-num">Q${qi+1}</div><div class="mcq-q">${q.q}</div></div>
+      <div class="mcq-tags"><span class="tag mcq">${q.unit.toUpperCase()}</span><span class="tag ${q.type==='tricky'?'hot':q.type==='numerical'?'imp':'green'}">${q.type.toUpperCase()}</span></div>
+      <div class="options" id="opts-${q.id}">
+        ${q.opts.map((opt,i)=>`<div class="option" onclick="checkAnswer(${q.id},${i},${q.ans})" id="opt-${q.id}-${i}"><div class="opt-letter">${String.fromCharCode(65+i)}</div><div>${opt}</div></div>`).join('')}
+      </div>
+      <div class="mcq-actions">
+        <button class="btn btn-primary" onclick="revealAnswer(${q.id},${q.ans})">✓ Check Answer</button>
+        <button class="btn btn-secondary" onclick="toggleExp(${q.id})">💡 Explanation</button>
+      </div>
+      <div class="answer-reveal" id="rev-${q.id}">
+        <div class="correct-ans">✅ Correct: ${String.fromCharCode(65+q.ans)}) ${q.opts[q.ans]}</div>
+        <div class="explanation">${q.exp}</div>
+      </div>
+    </div>`).join('');
+}
+function checkAnswer(qId,sel,cor){
+  const opts=document.getElementById('opts-'+qId);if(opts.dataset.answered)return;opts.dataset.answered='1';
+  for(let i=0;i<4;i++){const o=document.getElementById(`opt-${qId}-${i}`);if(!o)continue;if(i===cor)o.classList.add('correct');else if(i===sel)o.classList.add('wrong');}
+  mcqTotal++;if(sel===cor)mcqScore++;updateScore();
+  document.getElementById('rev-'+qId).classList.add('show');
+  document.getElementById('mcqProgressBar').style.width=`${(mcqTotal/currentMCQs.length)*100}%`;
+}
+function revealAnswer(qId,ans){document.getElementById('rev-'+qId).classList.add('show');}
+function toggleExp(qId){document.getElementById('rev-'+qId).classList.toggle('show');}
+function filterMCQ(f,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentFilter=f;
+  const filtered=f==='all'?allMCQs:allMCQs.filter(q=>q.unit===f||q.type===f);
+  renderMCQs(filtered);mcqScore=0;mcqTotal=0;updateScore();
+}
+function shuffleMCQ(){renderMCQs([...currentMCQs].sort(()=>Math.random()-.5));}
+function resetMCQ(){mcqScore=0;mcqTotal=0;updateScore();renderMCQs(currentMCQs);}
+function updateScore(){document.getElementById('scorePill').textContent=`Score: ${mcqScore}/${mcqTotal}`;}
+function startMock(){
+  mockQuestions=[...allMCQs].sort(()=>Math.random()-.5).slice(0,30);
+  mockAnswers={};mockCurrent=0;mockSeconds=1800;
+  document.getElementById('mockSetup').style.display='none';
+  document.getElementById('mockTest').style.display='block';
+  initQG();renderMQ();
+  mockTimerInterval=setInterval(()=>{
+    mockSeconds--;const m=String(Math.floor(mockSeconds/60)).padStart(2,'0'),s=String(mockSeconds%60).padStart(2,'0');
+    document.getElementById('mockTimer').textContent=`${m}:${s}`;
+    if(mockSeconds<=0){clearInterval(mockTimerInterval);submitMock();}
+  },1000);
+}
+function initQG(){document.getElementById('questionGrid').innerHTML=mockQuestions.map((_,i)=>`<div class="q-bubble" id="mb-${i}" onclick="mockGT(${i})">${i+1}</div>`).join('');}
+function renderMQ(){
+  const q=mockQuestions[mockCurrent];document.getElementById('mockProgress').textContent=`Question ${mockCurrent+1} of 30`;
+  const sel=mockAnswers[mockCurrent];
+  document.getElementById('mockQuestion').innerHTML=`<div class="mcq-card"><div class="mcq-header"><div class="mcq-num">Q${mockCurrent+1}</div><div class="mcq-q">${q.q}</div></div><div class="options">${q.opts.map((opt,i)=>`<div class="option ${sel===i?'selected':''}" onclick="mockSel(${i})"><div class="opt-letter">${String.fromCharCode(65+i)}</div><div>${opt}</div></div>`).join('')}</div></div>`;
+  document.getElementById('prevBtn').disabled=mockCurrent===0;document.getElementById('nextBtn').disabled=mockCurrent===29;
+}
+function mockSel(opt){mockAnswers[mockCurrent]=opt;const b=document.getElementById('mb-'+mockCurrent);if(b)b.classList.add('answered');document.getElementById('mockAttempted').textContent=Object.keys(mockAnswers).length;renderMQ();}
+function mockNav(d){mockCurrent=Math.max(0,Math.min(29,mockCurrent+d));renderMQ();}
+function mockGT(i){mockCurrent=i;renderMQ();}
+function submitMock(){
+  clearInterval(mockTimerInterval);document.getElementById('mockTest').style.display='none';
+  let c=0,w=0,sk=0;
+  mockQuestions.forEach((q,i)=>{if(mockAnswers[i]===undefined)sk++;else if(mockAnswers[i]===q.ans)c++;else w++;});
+  const sc=c-(w*0.25),pct=Math.round((c/30)*100);
+  document.getElementById('mockResult').style.display='block';
+  document.getElementById('mockResult').innerHTML=`
+    <div class="hero" style="text-align:center">
+      <div class="hero-title">📊 Test Complete!</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px">
+        <div class="stat-card"><div class="stat-num" style="color:var(--green)">${c}</div><div class="stat-label">Correct</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--red)">${w}</div><div class="stat-label">Wrong</div></div>
+        <div class="stat-card"><div class="stat-num">${sk}</div><div class="stat-label">Skipped</div></div>
+        <div class="stat-card"><div class="stat-num">${sc.toFixed(2)}</div><div class="stat-label">Net Score</div></div>
+      </div>
+      <div style="font-size:1.3rem;font-weight:700;margin-top:18px;color:${pct>=70?'var(--green)':pct>=50?'var(--accent3)':'var(--red)'}">${pct}% — ${pct>=70?'🏆 Excellent!':pct>=50?'👍 Good Effort':'📚 Keep Studying'}</div>
+    </div>
+    <div style="margin-top:18px"><div class="section-title">📋 Answer Review</div>
+    ${mockQuestions.map((q,i)=>{
+      const ua=mockAnswers[i],isC=ua===q.ans,isSk=ua===undefined;
+      return `<div class="mcq-card ${!isSk&&isC?'correct-card':!isSk?'wrong-card':''}">
+        <div style="font-size:.81rem"><b>Q${i+1}.</b> ${q.q}</div>
+        <div style="margin-top:5px;font-size:.76rem">${isSk?'<span style="color:var(--text3)">⏭ Skipped</span>':isC?`<span style="color:var(--green)">✅ ${String.fromCharCode(65+ua)}) Correct</span>`:`<span style="color:var(--red)">❌ Your: ${String.fromCharCode(65+ua)}) | Correct: ${String.fromCharCode(65+q.ans)})</span>`}</div>
+        <div style="font-size:.74rem;color:var(--text3);margin-top:3px">${q.exp}</div>
+      </div>`;}).join('')}
+    </div>
+    <button class="btn btn-primary" style="margin-top:14px" onclick="resetMock()">🔄 Retake Test</button>`;
+}
+function resetMock(){document.getElementById('mockResult').style.display='none';document.getElementById('mockSetup').style.display='block';}
+window.onload=function(){
+  showPage('dashboard');initMCQ();
+  document.addEventListener('click',function s(){toggleTimer();document.removeEventListener('click',s);},{once:true});
+};
+</script>
+</body>
+</html>
