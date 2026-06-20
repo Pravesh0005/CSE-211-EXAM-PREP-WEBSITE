@@ -1,7 +1,7 @@
 <div align="center">
 
 <!-- HERO BANNER -->
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=2,12,24&height=200&section=header&text=CSE211%20%E2%80%94%20COA&fontSize=52&fontColor=fff&animation=twinkling&fontAlignY=36&desc=Computer%20Organization%20%26%20Architecture%20%7C%20Ultimate%20Exam%20Prep&descAlignY=58&descSize=16" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&height=200&text=CSE211%20-%20COA&fontSize=52&animation=twinkling&color=gradient&desc=Computer%20Organization%20and%20Architecture%20%7C%20Ultimate%20Exam%20Prep&descAlignY=60" width="100%"/>
 
 <br/>
 
