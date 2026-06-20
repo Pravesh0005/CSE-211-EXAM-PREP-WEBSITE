@@ -90,14 +90,14 @@
 # No installation. No dependencies. Zero setup.
 
 # Step 1: Download
-# → Get CSE211_COA_ExamPrep.html
+# → Get cse211.html
 
 # Step 2: Open
-double-click CSE211_COA_ExamPrep.html
+double-click cse211.html
 # OR
-open CSE211_COA_ExamPrep.html       # macOS
-start CSE211_COA_ExamPrep.html      # Windows
-xdg-open CSE211_COA_ExamPrep.html   # Linux
+open cse211.html       # macOS
+start cse211.html      # Windows
+xdg-open cse211.html   # Linux
 
 # Step 3: Study! 🎓
 ```
@@ -487,7 +487,7 @@ Pure web technologies, runs in any browser.
 |
 ├── 📄 README.md                     ← You are here
 |
-└── 📄 CSE211_COA_ExamPrep.html      ← Main file (open this!)
+└── 📄 cse211.html      ← Main file (open this!)
 ```
 
 ---
@@ -523,7 +523,7 @@ git fork https://github.com/Pravesh0005/CSE-211-EXAM-PREP-WEBSITE
 git checkout -b feature/fix-booth-explanation
 
 # 3. Make changes
-# Edit CSE211_COA_ExamPrep.html
+# Edit cse211.html
 
 # 4. Commit
 git commit -m "fix: Correct Booth's algorithm step 3 explanation"
