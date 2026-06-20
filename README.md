@@ -22,7 +22,7 @@
 <br/><br/>
 
 <p>
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=21&pause=1000&color=0EA5E9&center=true&vCenter=true&multiline=true&width=750&height=60&lines=Master+COA+with+Morris+Mano+Style+Notes+⚙️;110%2B+MCQs+from+your+actual+PYQs+%26+MCQ+Bank+📝;Instruction+Cycle+%7C+Cache+%7C+DMA+%7C+Booth's+%7C+Pipeline+🔧" alt="Typing SVG"/>
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=24&pause=1200&color=0EA5E9&center=true&vCenter=true&multiline=true&width=1000&height=130&lines=Master+COA+with+Morris+Mano+Style+Notes+📘;110%2B+MCQs+from+PYQs+and+MCQ+Bank+📝;Instruction+Cycle+%7C+Cache+%7C+DMA+%7C+Booths+%7C+Pipeline+⚙️" alt="Typing SVG"/>
 </p>
 
 <br/>
