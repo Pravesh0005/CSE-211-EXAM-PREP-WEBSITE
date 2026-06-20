@@ -40,6 +40,28 @@
 
 <br/><br/>
 
+<div align="center">
+
+### 🦖 Architecture of the Dino Runtime Engine
+
+| Visual Element | COA Interpretation |
+|---------------|-------------------|
+| 🦖 Dino | Central Processing Unit (CPU) |
+| 🌵 Cactus | Interrupt / Hazard |
+| ☁️ Clouds | Background Processes |
+| 🏃 Continuous Running | Clock Cycle Execution |
+| 📈 Increasing Score | Instruction Count |
+| ⏱️ Game Speed | CPU Frequency |
+| 🎮 Endless Loop | Fetch → Decode → Execute Cycle |
+
+> 💡 Fun Analogy: This entire game is basically a tiny Computer Organization simulator.
+>
+> The CPU (Dino) continuously executes instructions every clock cycle, handles interrupts (Cactus), processes background events (Clouds), and increases its instruction count (Score) while running through the Fetch → Decode → Execute cycle.
+
+</div>
+
+---
+
 <h3>⚙️ The complete CSE211 COA study system — built from 9 PPTs, PYQ papers, MCQ bank, Sir Notes, and Unit 1–6 DOCX.</h3>
 
 </div>
